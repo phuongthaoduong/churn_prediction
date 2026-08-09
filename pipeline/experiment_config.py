@@ -101,6 +101,12 @@ def label_close_dates(batch_meta: pd.DataFrame, l2_thresholds: pd.DataFrame) -> 
     out["l2_label_close"] = out["prediction_point"] + pd.to_timedelta(
         out["prediction_point"].map(max_tau), unit="D"
     )
+    missing = out.loc[out["l2_label_close"].isna(), "prediction_point"]
+    if not missing.empty:
+        raise ValueError(
+            "No L2 thresholds found for prediction point(s): "
+            + ", ".join(f"{p:%Y-%m-%d}" for p in missing)
+        )
     return out
 
 
@@ -109,6 +115,7 @@ def usable_batches(t, scheme: str, close_dates: pd.DataFrame) -> list:
 
     This is the no-leakage rule for every (re)training event: a model
     trained at time t may only use batches returned by this function.
+    `t` and the close-date columns are tz-naive, date-level timestamps.
     """
     if scheme == "L1":
         col = "l1_label_close"

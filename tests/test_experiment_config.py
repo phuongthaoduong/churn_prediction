@@ -54,6 +54,13 @@ def test_label_close_dates(batch_meta, l2_thresholds):
     assert aug["l2_label_close"] == pd.Timestamp("2024-09-10")
 
 
+def test_label_close_dates_raises_on_missing_thresholds(batch_meta, l2_thresholds):
+    # drop all threshold rows for 2024-10-01
+    partial = l2_thresholds[l2_thresholds["prediction_point"] != "2024-10-01"]
+    with pytest.raises(ValueError, match="2024-10-01"):
+        label_close_dates(batch_meta, partial)
+
+
 def test_usable_batches_l1(batch_meta, l2_thresholds):
     close = label_close_dates(batch_meta, l2_thresholds)
     # at 2024-10-01: Aug closed (08-31), Sep closes exactly 10-01 (inclusive), Oct not

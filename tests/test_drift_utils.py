@@ -57,3 +57,13 @@ def test_psi_empty_bin_is_finite():
     psi = compute_psi(ref, cur, epsilon=1e-6)
     assert np.isfinite(psi)
     assert psi > 0
+
+
+def test_psi_rejects_mismatched_lengths():
+    with pytest.raises(ValueError):
+        compute_psi(np.array([1.0]), np.array([0.2, 0.3, 0.5]))
+
+
+def test_bin_proportions_rejects_empty_values():
+    with pytest.raises(ValueError):
+        bin_proportions(np.array([]), np.array([1.0, 2.0]))

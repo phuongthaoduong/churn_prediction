@@ -16,6 +16,17 @@ For each label scheme (L1, L2):
 NOTE: hyperparameters are provisional defaults (experiment_config.XGB_PARAMS).
 After Phase-2 tuning, rerun this script to regenerate importances/baselines.
 
+Notes for Phase-2 consumers:
+  (a) psi_batch_distributions.csv proportions are computed under the
+      ORIGINAL frozen edges from this script's reference batch. If S4
+      resets its reference after a retraining event, re-derive edges from
+      the new reference via drift_utils.make_bins rather than reusing
+      these rows.
+  (b) Bin edges live in psi_reference.json, keyed by (scheme, feature) —
+      join on those keys to recover edges for the CSV.
+  (c) Gain values in feature_importance.csv are raw total gain, not
+      normalized.
+
 Input:
   - profiling_output/dataset_final.parquet
   - profiling_output/batch_metadata.csv
@@ -80,7 +91,14 @@ def main():
         train = df[df["prediction_point"].isin(train_pps)]
         X = train[FEATURE_COLS]
         y = train[f"label_{scheme}"]
-        spw = float((y == 0).sum() / (y == 1).sum())
+        n_pos = int((y == 1).sum())
+        n_neg = int((y == 0).sum())
+        if n_pos == 0 or n_neg == 0:
+            raise ValueError(
+                f"{scheme}: degenerate class balance in matured training data "
+                f"(pos={n_pos}, neg={n_neg}) — cannot compute scale_pos_weight"
+            )
+        spw = n_neg / n_pos
 
         model = XGBClassifier(**XGB_PARAMS, scale_pos_weight=spw)
         model.fit(X, y)

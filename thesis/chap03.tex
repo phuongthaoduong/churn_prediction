@@ -1,0 +1,226 @@
+% !TeX root = ../thuthesis-example.tex
+
+\chapter{Research Methodology}
+% \chapter{数学符号和公式}
+\section{Research Design}
+
+As established in the research background, churn prediction in non-contractual SME retail faces three unresolved methodological problems and an unstudied interaction. First, fixed inactivity thresholds remain the dominant labeling approach, even though threshold choice can materially alter model conclusions \cite{mirkovic2022}. In SME retail, where purchase cycles differ substantially across industry categories and customer types, a single inactivity cutoff may misclassify slow-cycle customers as churned while failing to identify early disengagement among fast-cycle customers. Second, churn models are often evaluated using a single train and test split, although customer behavior and transaction patterns evolve over time. The question of when and how to update churn models has therefore received insufficient attention in applied churn prediction research \cite{imani2025}. Third, feature construction and selection is typically performed manually based on domain conventions such as RFM, without a systematic method for identifying which fields in the available data schema are predictive \cite{imani2025}. When the platform data schema contains multiple interconnected operational tables, the space of constructible features exceeds what manual inspection can reliably cover. The first two issues may also interact: when churn labels are derived from category-level purchase rhythms, aggregate behavioral shifts within an industry category can affect not only the input features but also the category-level threshold that defines the target label, creating a form of drift that has not been directly examined in prior studies.
+
+The central research problem is therefore whether the choice of churn labeling scheme moderates the effectiveness of model updating strategies in non-contractual SME retail. This study addresses the problem through a two-phase design. In the first phase, LLM-guided feature construction and selection is used to identify candidate features from the platform's multi-table schema, and the resulting feature set is compared against a conventional RFM baseline on the initial training period. The validated feature set is then frozen for use in the second phase: a 2 × 4 factorial design where two labeling schemes, fixed-threshold labeling and category-level dynamic labeling, are crossed with four updating strategies: static, periodic, rolling-window, and drift-triggered updating. The eight resulting configurations use the same XGBoost learner, the frozen feature set, temporal batching structure, and prequential evaluation protocol. This design isolates the effects of labeling and updating decisions from model choice, feature construction, and evaluation protocol confounds.
+
+To avoid comparing different target variables directly, the primary comparison between labeling schemes is evaluated against a shared downstream business outcome: whether customers fail to repurchase within a common future decision horizon. The fixed and dynamic labels are treated as alternative training targets, while predictive utility is assessed using the same business-grounded evaluation criterion across all configurations. Label-specific performance is reported as a secondary diagnostic rather than the main basis for comparing labeling schemes.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{Screenshot 2026-06-16 at 02.55.55.png}
+    \caption{Main Evaluation Framework}
+    \label{fig:main-evaluation-framework}
+\end{figure}
+
+This study is guided by a preliminary research question and three main research questions. The preliminary question addresses feature construction and selection, and its outcome determines the shared feature set for the main experiment. The three main questions correspond to the factorial design: the first examines the effect of churn label definition, the second focuses on model updating strategy, and the third investigates whether these two methodological choices interact.
+
+The preliminary research question asks whether LLM-guided feature construction and selection from the platform's multi-table schema produces a feature set that improves predictive performance compared with conventional RFM features derived from transaction records alone. The study expects that the LLM-guided process will identify cross-table features (e.g., customer payment behavior relative to store norms, product category diversity, monetary trend indicators) that are not part of the standard RFM framework, and that including these features will improve AUC on the initial training period. This expectation would not be supported if the LLM-selected feature set performs comparably to or worse than the RFM baseline. In either case, the better-performing feature set is frozen and used across all configurations in the main experiment. Feature selection is performed exclusively on the initial training period using time-series cross-validation to prevent leakage into the evaluation batches.
+
+The first research question asks whether category-level dynamic labeling improves downstream churn identification utility and temporal stability compared with fixed-threshold labeling in non-contractual SME retail. The study expects that models trained with category-level dynamic labels will achieve higher Recall@10\% and lower cross-batch AUC variance than models trained with fixed-threshold labels, when both are evaluated against the same downstream repurchase outcome. This expectation would not be supported if dynamic labeling fails to improve Recall@10\%, or if its temporal stability is not better than fixed labeling under the shared evaluation criterion.
+
+The second research question asks which model updating strategy provides the best balance between predictive performance, temporal stability, and computational cost over consecutive monthly evaluation batches. The study expects that updating strategies will generally outperform the static baseline in temporal evaluation, although the degree of improvement may differ across strategies. This expectation would not be supported if static deployment performs comparably to updating strategies across monthly batches, or if no meaningful temporal degradation is observed.
+
+Within the same question, the study further expects that drift-triggered updating will offer the most efficient cost and performance balance. Specifically, drift-triggered updating is expected to achieve predictive performance comparable to periodic or rolling-window updating while requiring fewer retraining events. This expectation would not be supported if drift-triggered updating performs substantially worse than periodic or rolling-window updating, or if it retrains so frequently that it no longer provides a meaningful cost advantage. The robustness of this conclusion will be examined through sensitivity analysis of the drift trigger thresholds.
+
+The third research question asks whether the effectiveness of model updating strategies depends on the churn labeling scheme used. The study expects that the benefit of model updating over static deployment will be stronger under category-level dynamic labeling than under fixed labeling. In particular, drift-triggered updating is expected to show its greatest relative advantage when combined with category-level dynamic labeling, because aggregate behavioral shifts within an industry category may shift both the input features and the category-level churn threshold. This expectation would not be supported if the interaction between labeling and updating is negligible, statistically unsupported, or too small in practical terms to affect the cost and performance frontier.
+
+Overall, the preliminary question establishes the feature foundation, while the three main questions move from individual methodological effects to their interaction. The most distinctive part of the study is the third question, because it tests whether churn label definition and model maintenance strategy should be designed jointly rather than treated as independent decisions.
+
+\section{Research Methodology}
+
+\subsection{Experimental Implementation}
+
+The two-phase design described above is implemented on time-ordered transaction data from Kingdee's retail and business management platforms. The merchants in the dataset are grouped into several broad industry categories, including daily consumer goods, food and beverage, apparel and personal goods, home and durable goods, and other specialized retail services. These categories serve a dual role: they define the stratification for analysis and, under the dynamic labeling scheme, they determine the churn threshold applied to each customer \citep{singh2023retailchurn}. XGBoost is held constant across all eight configurations to isolate the effects of labeling and updating strategies from model choice confounds. A simpler model would risk underfitting feature interactions, while a more complex architecture would introduce optimization noise that could obscure the comparison. An alternative fixed threshold is examined in a sensitivity analysis rather than the main experiment, both to keep the matrix tractable and because threshold choice itself materially affects modeling conclusions \cite{mirkovic2022}. All configurations share the same features and temporal batching structure, so that observed differences are attributable solely to the design choices under study.
+
+Tables~\ref{tab:exp-variables} and~\ref{tab:design-variables} present the complete variable classification for the experiment. The churn labeling scheme is an independent experimental factor (IV1). In the analysis of the third research question, it additionally serves as the interacting factor that conditions the effect of the model updating strategy, testing whether the two factors should be designed jointly or can be optimized separately.
+
+\begin{table}[htbp]
+  \centering
+  \begin{threeparttable}[c]
+    \caption{Experimental variables: independent and dependent.}
+    \label{tab:exp-variables}
+    \footnotesize
+    \begin{tabular}{>{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}p{1.9cm} >{\raggedright\arraybackslash}p{4.6cm} >{\raggedright\arraybackslash}p{4.6cm}}
+      \toprule
+      Variable Type & Variable & Operationalization & Justification \\
+      \midrule
+      Independent Variable~1 & Churn labeling scheme &
+        (a) Fixed inactivity threshold; (b) Category-level dynamic threshold at a high percentile of the pooled inter-purchase interval distribution within each industry category, with a global fallback for categories with insufficient data. In the third research question, this factor additionally serves as the interacting factor that conditions the effect of IV2.\tnote{a} &
+        Tests whether category-level behavior-derived labels improve predictions over fixed labels. Alternative percentiles tested in sensitivity analysis. \\[6pt]
+      Independent Variable~2 & Model update strategy &
+        S1: Static; S2: Periodic (monthly, all accumulated data); S3: Rolling-window (monthly, recent data only); S4: Drift-triggered (PSI + AUC decline signals, rolling window) &
+        Tests which maintenance regime best sustains performance under concept drift. \\
+      \midrule
+      Dependent Variable~1 & Predictive performance &
+        AUC, F1-score, Recall@$k$ per monthly batch &
+        AUC captures discrimination; F1 balances precision and recall; Recall@$k$ reflects SME merchants' limited intervention capacity \cite{Shahabikargar2026}. \\[6pt]
+      Dependent Variable~2 & Model stability &
+        CV of AUC and F1 across batches; Jaccard similarity of top-$k$ high-risk lists between consecutive batches &
+        Constant reshuffling of high-risk lists erodes merchant trust. \\[6pt]
+      Dependent Variable~3 & Operational cost &
+        Number of retraining events, data volume per event, cumulative training time &
+        Captures the resource dimension for cost-constrained SME platforms. \\
+      \bottomrule
+    \end{tabular}
+    \begin{tablenotes}
+      \footnotesize
+      \item[a] The interaction between labeling scheme and update strategy is the study's most distinctive analytical contribution. A null result would indicate that the two factors can be optimized independently.
+    \end{tablenotes}
+  \end{threeparttable}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \begin{threeparttable}[c]
+    \caption{Control and adjustment variables.}
+    \label{tab:design-variables}
+    \footnotesize
+    \begin{tabular}{>{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}p{1.9cm} >{\raggedright\arraybackslash}p{4.6cm} >{\raggedright\arraybackslash}p{4.6cm}}
+      \toprule
+      Variable Type & Variable & Operationalization & Justification \\
+      \midrule
+      Control Variable~1 & Base learner &
+        XGBoost, hyperparameters tuned once via time-series cross-validation, then frozen &
+        Prevents algorithmic differences from confounding results \cite{chen2016}. \\[6pt]
+      Control Variable~2 & Feature set &
+        Validated in Phase~1 via LLM-guided feature construction and selection against an RFM baseline; frozen before Phase~2 begins. The feature set includes customer-level, store-level, and time-level features derived from the platform's multi-table schema. &
+        Prevents feature construction from becoming a confound. Feature selection validated on the initial training period before evaluation. \\[6pt]
+      Control Variable~3 & Temporal structure &
+        Fixed-length observation window, monthly batch cadence, initial training period reserved before evaluation begins &
+        Ensures identical temporal scaffolding across all strategies. \\[6pt]
+      Control Variable~4 & Data scope &
+        Exclude customers with no purchase in observation window; exclude customers with truncated label windows. Covers broad industry categories: daily consumer goods, food \& beverage, apparel \& personal goods, home \& durable goods, and other specialized retail services. &
+        Prevents trivial predictions and label noise. Category breadth ensures sufficient variation in repurchase cycles for meaningful churn inference. \\
+      \midrule
+      Adjustment Variable~1 & Class imbalance weight &
+        \texttt{scale\_pos\_weight} recomputed at each retraining to match the current churn rate &
+        Necessary because churn rates shift over time \cite{he2009}. \\[6pt]
+      Adjustment Variable~2 & Category-level threshold coverage &
+        Category-level (sufficient pooled purchase data) then global-level fallback; proportion of customers assigned to each tier reported per batch &
+        Verifies that category-level thresholds are supported by sufficient data. Categories with too few customers fall back to a global threshold. \\
+      \bottomrule
+    \end{tabular}
+  \end{threeparttable}
+\end{table}
+
+\subsection{Temporal Batching and Data Partitioning}
+
+The data is divided into consecutive monthly batches, each anchored at a prediction point at the start of the month, yielding approximately one year of evaluation batches after the initial training period. Monthly granularity is chosen because it provides enough decision points to distinguish update strategies and matches the cycle at which small merchants typically review their business. Around each prediction point, two strictly separated windows are defined: an observation window before the prediction point, used exclusively for feature construction, and a label window after it, used exclusively for label assignment. This separation helps prevent future information from leaking into the training data, which is one of the most common and serious methodological problems in applied churn research \cite{mirkovic2022}. Customers with no purchase in the observation window are excluded from scoring, since predicting churn for already inactive customers is trivial and would artificially inflate metrics. Before the formal experiment, a data profiling step covering data span, merchant and customer scale, median repurchase cycles by industry category, and the proportion of customers with sufficient purchase history is conducted to verify the appropriateness of window lengths and threshold settings.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{data/fig_temporal_batching.png}
+    \caption{Temporal batching structure and model update strategies.}
+    \label{fig:temporal-batching}
+\end{figure}
+
+\subsection{Churn Label Construction}
+
+Churn labels are constructed under two schemes. Under the fixed-threshold scheme (L1), a customer $i$ is labeled churned if no purchase occurs within a fixed inactivity period $\tau_{\text{fixed}}$ after the prediction point $t$:
+\begin{equation}
+  y_i^{(t)} =
+  \begin{cases}
+    1 & \text{if no transaction by customer } i \text{ occurs in } (t, \; t + \tau_{\text{fixed}}], \\
+    0 & \text{otherwise.}
+  \end{cases}
+  \label{eq:label-fixed}
+\end{equation}
+
+Under the category-level dynamic scheme (L2), the churn threshold for each industry category $c$ is set to a high percentile of the pooled inter-purchase interval distribution across all customers in that category. Let $\{d_{j,c}\}$ denote the set of all inter-purchase intervals observed for customers in category $c$ up to the prediction point. The category-level threshold is defined as:
+\begin{equation}
+  \tau_c = P_q\!\bigl(\{d_{j,c}\}\bigr),
+  \label{eq:threshold-dynamic}
+\end{equation}
+where $P_q$ denotes the $q$-th empirical percentile (e.g., $q = 95$). For categories with insufficient pooled purchase data, a global fallback threshold $\tau_{\text{global}} = P_q\!\bigl(\{d_{j,\cdot}\}\bigr)$ computed across all categories is used. A customer $i$ belonging to category $c$ is then labeled:
+\begin{equation}
+  y_i^{(t)} =
+  \begin{cases}
+    1 & \text{if no transaction by customer } i \text{ occurs in } (t, \; t + \tau_c], \\
+    0 & \text{otherwise.}
+  \end{cases}
+  \label{eq:label-dynamic}
+\end{equation}
+
+The empirical percentile is preferred over a mean plus standard deviations rule because inter-purchase intervals are right-skewed. The percentile is robust to extreme values and has a clear business interpretation: the customer has been inactive for longer than almost all historical purchase gaps observed in their industry category. The proportion of customers assigned to category-level versus global thresholds is reported per batch. This two-tier design (category-level and global) is chosen because the primary source of purchase rhythm heterogeneity in multi-category retail platforms lies between industry categories rather than within them \citep{singh2023retailchurn, europanel2023categorychurn}, while category-level pooling provides statistically stable estimates that individual-level thresholds cannot achieve at micro-retail data scales. Customers whose label windows extend beyond the data boundary are excluded rather than imputed, avoiding label noise. Probabilistic buy-till-you-die models such as Pareto/NBD \cite{fader2009} are excluded as an experimental baseline because their stationarity assumption conflicts with this study's focus on drift and their latent probability output still requires a cutoff before any action can be taken.
+
+\subsection{LLM-Guided Feature Construction and Selection}
+
+The feature set used across all eight configurations in the main experiment is determined in a preliminary phase before the factorial experiment begins. An LLM is provided with the platform's multi-table data schema, including customer profiles, sales transactions, product master data, inventory records, and merchant metadata, along with the prediction objective (binary churn classification). The LLM proposes candidate features through cross-table joins, aggregations, and transformations. All candidates are computed on the initial training period and filtered empirically using XGBoost feature importance and mutual information with the target variable. For a candidate feature $X$ and the binary churn label $Y$, the mutual information is computed as:
+\begin{equation}
+  I(X; Y) = \sum_{y \in \{0,1\}} \sum_{x \in \mathcal{X}} p(x, y) \ln \frac{p(x, y)}{p(x)\, p(y)},
+  \label{eq:mutual-info}
+\end{equation}
+where continuous features are discretized into equal-frequency bins before computation. Features are retained if they exceed both an XGBoost importance threshold and a mutual information threshold, both determined via cross-validation on the initial training period. The resulting LLM-guided feature set is compared against a conventional RFM baseline using AUC under time-series cross-validation on the initial training period. The RFM baseline features for customer $i$ at prediction point $t$ are defined as:
+\begin{align}
+  \text{Recency}_i^{(t)} &= t - t_i^{\text{last}}, \label{eq:recency} \\
+  \text{Frequency}_i^{(t)} &= \bigl|\{n : t_n^{(i)} \in [t - W_{\text{obs}}, \; t]\}\bigr|, \label{eq:frequency} \\
+  \text{Monetary}_i^{(t)} &= \frac{1}{\text{Frequency}_i^{(t)}} \sum_{t_n^{(i)} \in [t - W_{\text{obs}}, t]} m_n^{(i)}, \label{eq:monetary}
+\end{align}
+where $t_i^{\text{last}}$ is customer $i$'s most recent transaction date, $W_{\text{obs}}$ is the observation window length, and $m_n^{(i)}$ is the monetary value of the $n$-th transaction. Monetary value is defined here as the average transaction amount rather than the total, following the convention that normalizes for frequency differences across customers. Additional baseline features include inter-purchase interval statistics (mean, standard deviation, and coefficient of variation) derived from transaction records alone. The better-performing set is frozen and used identically across all configurations and monthly batches in the main experiment. Feature selection is performed exclusively on the initial training period; no evaluation-period data is used during this phase, preventing leakage into the factorial experiment. Missing values in the final feature set are handled by XGBoost's native mechanism, which learns a default split direction for missing entries.
+
+All features feed a single global model trained on pooled data across stores. Most SME stores have too few customers to support independent models. Pooling allows small stores to benefit from behavioral patterns learned across stores. Store-context features (customer behavior expressed relative to the store norm) are the mechanism by which the global model adapts to local conditions, so that the model answers ``how unusual is this silence for this store?'' rather than ``how long is this silence?''
+
+\subsection{Base Learner and Updating Strategies}
+
+XGBoost is selected as the base learner because it is the standard choice for tabular prediction tasks, natively supports mixed feature types and missing values, and trains efficiently enough to support repeated retraining \cite{chen2016}. The model choice is deliberately conservative, since this study's contribution lies in the label and update design rather than the learner. Hyperparameters are tuned once on the initial training period using time-series cross-validation and then frozen across all batches and strategies. The only exception is the class imbalance weight, recomputed at each retraining according to the current churn rate:
+\begin{equation}
+  \texttt{scale\_pos\_weight} = \frac{|\{i : y_i = 0\}|}{|\{i : y_i = 1\}|}.
+  \label{eq:scale-pos-weight}
+\end{equation}
+
+The update mechanism is uniform full retraining: every update trains a new model from scratch on the designated data window and discards the previous one. Preliminary profiling is used to verify that full retraining remains computationally feasible at SME data scale. Given this feasibility, incremental mechanisms offer no meaningful efficiency gain while retaining tree structure learned from earlier behavior, so full retraining is preferred because it makes every update independent and reproducible, and most importantly isolates the variable under study so that the four strategies differ only in when they update and on what data.
+
+The four strategies are as follows. S1 (static) is trained once and never updated, serving as the baseline for measuring model aging. S2 (periodic) is retrained every month on all accumulated data. S3 (rolling-window) is retrained every month on only data from a recent window whose length is determined during data profiling based on the median repurchase cycle of the target industry categories, testing the idea that under drift older data may be harmful as well as redundant \cite{zliobaite2010}. S4 (drift-triggered) is retrained only when monitoring signals indicate environmental change. The drift-triggered strategy uses two complementary signals. The first is a feature distribution signal based on the Population Stability Index (PSI), computed for the most important features against the reference batch from the last training \cite{siddiqi2006}. For a feature partitioned into $B$ bins, PSI is defined as:
+\begin{equation}
+  \text{PSI} = \sum_{b=1}^{B} \bigl(\tilde{p}_b^{\text{current}} - \tilde{p}_b^{\text{ref}}\bigr) \ln \frac{\tilde{p}_b^{\text{current}}}{\tilde{p}_b^{\text{ref}}},
+  \label{eq:psi}
+\end{equation}
+where $\tilde{p}_b = p_b + \epsilon$ for a small constant $\epsilon$ (e.g., $\epsilon = 10^{-6}$) to avoid undefined logarithms when a bin is empty, and $p_b^{\text{ref}}$ and $p_b^{\text{current}}$ are the proportions of observations in bin $b$ for the reference and current batches, respectively. A PSI value exceeding a predefined threshold (e.g., $\text{PSI} > 0.2$) indicates meaningful distributional shift \cite{siddiqi2006}. The second is a performance decline signal, computed once the label window closes by comparing the current batch's AUC against the model's running average since its last training:
+\begin{equation}
+  \Delta\text{AUC}_t = \overline{\text{AUC}}_{t_0:t-1} - \text{AUC}_t,
+  \label{eq:auc-decline}
+\end{equation}
+where $\overline{\text{AUC}}_{t_0:t-1}$ is the mean AUC from the last training point $t_0$ through batch $t{-}1$. A retraining event is triggered when either signal exceeds its respective threshold. This dual-signal design reflects the delayed-label nature of non-contractual churn prediction. Unlike data-stream settings, where instance-level feedback may be available immediately, churn labels can only be confirmed after enough time has passed to observe whether customers return and make another purchase. Additionally, the study monitors changes in the category-level dynamic churn thresholds across batches as a diagnostic tool. If model performance declines at the same time as substantial category-level threshold shifts, the degradation may stem from a change in the aggregate purchase rhythm of an industry category rather than from feature drift alone.
+
+\subsection{Evaluation Protocol}
+
+All strategies are evaluated using a prequential (test-then-train) protocol \cite{dawid1984, gama2013}. In each monthly batch, the existing model first predicts churn risk for all eligible customers. True labels are revealed only after the label window ends. Evaluation metrics are calculated, and only then may the model be retrained according to the strategy under test. The initial training period is excluded from evaluation. Predictive performance is measured using AUC, F1, and Recall@$k$. The F1-score balances precision and recall:
+\begin{equation}
+  \text{F1} = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}.
+  \label{eq:f1}
+\end{equation}
+Recall@$k$ measures the proportion of true churners captured in the top-$k$ predictions ranked by predicted churn probability:
+\begin{equation}
+  \text{Recall@}k = \frac{\bigl|\{i : i \in \text{Top-}k \;\land\; y_i = 1\}\bigr|}{|\{i : y_i = 1\}|},
+  \label{eq:recall-at-k}
+\end{equation}
+where $k$ is set to reflect the realistic intervention capacity of SME merchants and is reported alongside all results. Recall@$k$ is especially important because small merchants can realistically act on only a limited number of high-risk customers.
+
+Stability is evaluated by examining cross-batch performance variance and consistency of the high-risk customer list over time. Temporal stability is quantified using the coefficient of variation of AUC across evaluation batches:
+\begin{equation}
+  \text{CV}_{\text{AUC}} = \frac{\sigma(\text{AUC}_{1:T})}{\overline{\text{AUC}}_{1:T}},
+  \label{eq:cv-auc}
+\end{equation}
+and the Jaccard similarity between consecutive top-$k$ high-risk lists:
+\begin{equation}
+  J_t = \frac{|R_t \cap R_{t-1}|}{|R_t \cup R_{t-1}|},
+  \label{eq:jaccard}
+\end{equation}
+where $R_t$ is the set of customers in the top-$k$ risk list at batch $t$. Constant reshuffling of high-risk lists erodes merchant trust, making $J_t$ a practically important diagnostic. Operational cost is measured by the number of model updates, data volume per update, and cumulative training time.
+
+Strategies are compared using the Wilcoxon signed-rank test on paired monthly results \cite{demsar2006}, because the number of batches is limited and normality assumptions may not hold. For two strategies with paired batch-level metric differences $d_1, d_2, \ldots, d_T$, pairs where $d_i = 0$ are excluded, and the remaining $N$ non-zero differences are ranked by absolute value. The test statistic is:
+\begin{equation}
+  W = \sum_{i=1}^{N} \operatorname{sgn}(d_i) \cdot R_i,
+  \label{eq:wilcoxon}
+\end{equation}
+where $R_i$ is the rank of $|d_i|$ among all non-zero absolute differences. Given the relatively small number of monthly evaluation batches, all pairwise comparisons additionally report the median difference, the matched-pairs rank-biserial effect size:
+\begin{equation}
+  r_{rb} = \frac{W^{+} - W^{-}}{W^{+} + W^{-}},
+  \label{eq:rank-biserial}
+\end{equation}
+where $W^{+}$ and $W^{-}$ are the sums of positive and negative signed ranks respectively, and bootstrap confidence intervals, so that the practical size of differences can be assessed independently of $p$-values. Rather than declaring a single best strategy, the final results are reported as a cost and performance frontier, allowing platforms to choose the most suitable strategy for their own quality and cost preferences. The final analysis examines whether the optimal update strategy changes when the churn definition changes, directly testing the interaction between the two core themes of the study.

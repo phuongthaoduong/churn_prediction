@@ -1,0 +1,13 @@
+# Raw data (7.2 GB) and generated outputs — never commit
+sale_data/
+profiling_output/
+experiment_output/
+
+# OS / editor
+.DS_Store
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Stray placeholder file at repo root
+/training

@@ -1,6 +1,6 @@
 # Preprocessing Decision Log
 
-Generated: 2026-08-09 23:38:12 by `pipeline/step7_3_preprocessing_log.py`. Regenerate after any pipeline rerun — do not edit by hand.
+Generated: 2026-08-09 23:41:10 by `pipeline/step7_3_preprocessing_log.py`. Regenerate after any pipeline rerun — do not edit by hand.
 
 ## 1. Data scope
 
@@ -10,14 +10,14 @@ Generated: 2026-08-09 23:38:12 by `pipeline/step7_3_preprocessing_log.py`. Regen
 
 ## 2. Exclusion criteria and affected record counts (Step 2)
 
-| Cleaning step | Log file | Records excluded |
-|---|---|---|
-| 2.1 Extreme financial outliers | `exclusion_log_step2_1.csv` | 356 |
-| 2.2 System/test accounts | `exclusion_log_step2_2.csv` | 26 |
-| 2.3 Returns and corrections | `exclusion_log_step2_3.csv` | 1,308,639 |
-| 2.4 Orphan line items | `exclusion_log_step2_4.csv` | 10,000 |
+| Cleaning step | Records excluded | Log file | Log contents |
+|---|---|---|---|
+| 2.1 Extreme financial outliers | 356 | `exclusion_log_step2_1.csv` | complete |
+| 2.2 System/test accounts | 26 accounts (160,947 transactions) | `exclusion_log_step2_2.csv` | one row per removed account |
+| 2.3 Returns and corrections | 1,308,639 | `exclusion_log_step2_3.csv` | complete |
+| 2.4 Orphan line items | 611,091 | `exclusion_log_step2_4.csv` | 10,000-row sample |
 
-Per-step rationale is recorded in the corresponding `profiling_output/step2_*_summary.txt` / analysis reports.
+Per-step rationale is recorded in the corresponding `profiling_output/step2_*_summary.txt` / analysis reports. Note: the 2.2 and 2.4 log files above do not contain one row per excluded record — 2.2 logs one row per removed *account* (each covering many transactions) and 2.4 is a fixed-size sample of a larger removal; true removal counts are parsed from the corresponding summary text files, not from `count_rows` on those two logs.
 
 ## 3. Window-length choices and justification (Steps 3 & 5)
 

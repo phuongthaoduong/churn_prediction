@@ -15,6 +15,7 @@ Output: docs/preprocessing_log.md
 
 import json
 import os
+import re
 from datetime import datetime
 
 import pandas as pd
@@ -28,18 +29,28 @@ from experiment_config import (
     OUTPUT_DIR,
 )
 
-EXCLUSION_LOGS = [
-    ("2.1 Extreme financial outliers", "exclusion_log_step2_1.csv"),
-    ("2.2 System/test accounts", "exclusion_log_step2_2.csv"),
-    ("2.3 Returns and corrections", "exclusion_log_step2_3.csv"),
-    ("2.4 Orphan line items", "exclusion_log_step2_4.csv"),
-]
-
-
 def count_rows(path):
     """Row count of a possibly large CSV without loading it into memory."""
     with open(path) as f:
         return sum(1 for _ in f) - 1
+
+
+def parse_summary_counts(path, pattern):
+    """Extract one or more integers from a profiling summary text file.
+
+    Raises ValueError naming the file if the pattern does not match —
+    exclusion counts must never be silently guessed or defaulted.
+    Returns a tuple of ints, one per capture group.
+    """
+    with open(path) as f:
+        text = f.read()
+    m = re.search(pattern, text)
+    if not m:
+        raise ValueError(
+            f"Could not parse expected count from {path!r} using pattern "
+            f"{pattern!r}"
+        )
+    return tuple(int(g.replace(",", "")) for g in m.groups())
 
 
 def md_table(df, float_fmt="{:.4f}"):
@@ -78,16 +89,43 @@ def main():
     # --- 2. Exclusions ----------------------------------------------------
     w("## 2. Exclusion criteria and affected record counts (Step 2)")
     w("")
-    rows = []
-    for label, fname in EXCLUSION_LOGS:
-        path = os.path.join(OUTPUT_DIR, fname)
-        n = count_rows(path) if os.path.exists(path) else "MISSING"
-        rows.append({"Cleaning step": label, "Log file": f"`{fname}`",
-                     "Records excluded": f"{n:,}" if isinstance(n, int) else n})
-    w(md_table(pd.DataFrame(rows)))
+    n_21 = count_rows(os.path.join(OUTPUT_DIR, "exclusion_log_step2_1.csv"))
+    n_23 = count_rows(os.path.join(OUTPUT_DIR, "exclusion_log_step2_3.csv"))
+    n_accounts_22, n_txn_22 = parse_summary_counts(
+        os.path.join(OUTPUT_DIR, "test_account_detection_summary.txt"),
+        r"REMOVE:\s*([\d,]+) customers,\s*([\d,]+) transactions",
+    )
+    (n_24,) = parse_summary_counts(
+        os.path.join(OUTPUT_DIR, "step2_4_orphan_summary.txt"),
+        r"Orphan line items removed:\s*([\d,]+)",
+    )
+    exclusion_rows = [
+        {"Cleaning step": "2.1 Extreme financial outliers",
+         "Records excluded": f"{n_21:,}",
+         "Log file": "`exclusion_log_step2_1.csv`",
+         "Log contents": "complete"},
+        {"Cleaning step": "2.2 System/test accounts",
+         "Records excluded": f"{n_accounts_22:,} accounts ({n_txn_22:,} transactions)",
+         "Log file": "`exclusion_log_step2_2.csv`",
+         "Log contents": "one row per removed account"},
+        {"Cleaning step": "2.3 Returns and corrections",
+         "Records excluded": f"{n_23:,}",
+         "Log file": "`exclusion_log_step2_3.csv`",
+         "Log contents": "complete"},
+        {"Cleaning step": "2.4 Orphan line items",
+         "Records excluded": f"{n_24:,}",
+         "Log file": "`exclusion_log_step2_4.csv`",
+         "Log contents": "10,000-row sample"},
+    ]
+    w(md_table(pd.DataFrame(exclusion_rows)))
     w("")
     w("Per-step rationale is recorded in the corresponding "
-      "`profiling_output/step2_*_summary.txt` / analysis reports.")
+      "`profiling_output/step2_*_summary.txt` / analysis reports. Note: "
+      "the 2.2 and 2.4 log files above do not contain one row per excluded "
+      "record — 2.2 logs one row per removed *account* (each covering many "
+      "transactions) and 2.4 is a fixed-size sample of a larger removal; "
+      "true removal counts are parsed from the corresponding summary text "
+      "files, not from `count_rows` on those two logs.")
     w("")
 
     # --- 3. Window choices ------------------------------------------------

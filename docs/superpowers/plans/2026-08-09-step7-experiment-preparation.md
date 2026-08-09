@@ -49,7 +49,7 @@
 - Create: `.gitignore`
 - Create: `requirements.txt`
 
-- [ ] **Step 1: Initialize git and write .gitignore**
+- [x] **Step 1: Initialize git and write .gitignore**
 
 ```bash
 cd /Users/phuongthaoduong/Project/Data_Processing && git init
@@ -73,7 +73,7 @@ __pycache__/
 /training
 ```
 
-- [ ] **Step 2: Write requirements.txt**
+- [x] **Step 2: Write requirements.txt**
 
 ```text
 pandas>=2.2
@@ -84,7 +84,7 @@ xgboost>=2.0
 pytest>=8.0
 ```
 
-- [ ] **Step 3: Install xgboost and pytest**
+- [x] **Step 3: Install xgboost and pytest**
 
 Run:
 ```bash
@@ -97,7 +97,7 @@ python3 -c "import xgboost, pytest; print('xgboost', xgboost.__version__, '| pyt
 ```
 Expected: version numbers print without ImportError. If `libomp.dylib` load error: `brew install libomp`, retry.
 
-- [ ] **Step 4: Initial commit of the existing project**
+- [x] **Step 4: Initial commit of the existing project**
 
 ```bash
 cd /Users/phuongthaoduong/Project/Data_Processing
@@ -118,7 +118,7 @@ This module is the single source of truth for the experiment. Phase-2 strategy c
 - Create: `tests/conftest.py`
 - Test: `tests/test_experiment_config.py`
 
-- [ ] **Step 1: Write conftest.py so tests can import pipeline modules**
+- [x] **Step 1: Write conftest.py so tests can import pipeline modules**
 
 `tests/conftest.py`:
 ```python
@@ -128,7 +128,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "pipeline"))
 ```
 
-- [ ] **Step 2: Write the failing tests**
+- [x] **Step 2: Write the failing tests**
 
 `tests/test_experiment_config.py`:
 ```python
@@ -208,12 +208,12 @@ def test_usable_batches_rejects_unknown_scheme(batch_meta, l2_thresholds):
         usable_batches("2024-10-01", "L3", close)
 ```
 
-- [ ] **Step 3: Run tests to verify they fail**
+- [x] **Step 3: Run tests to verify they fail**
 
 Run: `cd /Users/phuongthaoduong/Project/Data_Processing && python3 -m pytest tests/test_experiment_config.py -v`
 Expected: FAIL — `ModuleNotFoundError: No module named 'experiment_config'`
 
-- [ ] **Step 4: Write the implementation**
+- [x] **Step 4: Write the implementation**
 
 `pipeline/experiment_config.py`:
 ```python
@@ -339,12 +339,12 @@ def usable_batches(t, scheme: str, close_dates: pd.DataFrame) -> list:
     return sorted(ok["prediction_point"].tolist())
 ```
 
-- [ ] **Step 5: Run tests to verify they pass**
+- [x] **Step 5: Run tests to verify they pass**
 
 Run: `python3 -m pytest tests/test_experiment_config.py -v`
 Expected: 7 passed
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add pipeline/experiment_config.py tests/conftest.py tests/test_experiment_config.py
@@ -359,7 +359,7 @@ git commit -m "feat: add experiment config with split constants and label-maturi
 - Create: `pipeline/drift_utils.py`
 - Test: `tests/test_drift_utils.py`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 `tests/test_drift_utils.py`:
 ```python
@@ -424,12 +424,12 @@ def test_psi_empty_bin_is_finite():
     assert psi > 0
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `python3 -m pytest tests/test_drift_utils.py -v`
 Expected: FAIL — `ModuleNotFoundError: No module named 'drift_utils'`
 
-- [ ] **Step 3: Write the implementation**
+- [x] **Step 3: Write the implementation**
 
 `pipeline/drift_utils.py`:
 ```python
@@ -480,17 +480,17 @@ def compute_psi(ref_props, cur_props, epsilon: float = 1e-6) -> float:
     return float(np.sum((cur - ref) * np.log(cur / ref)))
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `python3 -m pytest tests/test_drift_utils.py -v`
 Expected: 7 passed
 
-- [ ] **Step 5: Run the full test suite**
+- [x] **Step 5: Run the full test suite**
 
 Run: `python3 -m pytest tests/ -v`
 Expected: 14 passed
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add pipeline/drift_utils.py tests/test_drift_utils.py
@@ -505,7 +505,7 @@ git commit -m "feat: add PSI and equal-frequency binning utilities with missing-
 - Create: `pipeline/step7_1_train_eval_split.py`
 - Output: `profiling_output/train_eval_split.csv`, `profiling_output/experiment_config.json`, `profiling_output/step7_1_split_summary.txt`
 
-- [ ] **Step 1: Write the script**
+- [x] **Step 1: Write the script**
 
 `pipeline/step7_1_train_eval_split.py`:
 ```python
@@ -660,7 +660,7 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 2: Run the script**
+- [x] **Step 2: Run the script**
 
 Run:
 ```bash
@@ -671,7 +671,7 @@ Expected output includes:
 - Usable batches for L1 = 8; for L2 a smaller number (expected 6–7, depending on max tau per batch — verify each listed L2 close date ≤ 2025-04-01)
 - Per-batch rows matching `class_balance.csv` `n_total` values (~290k–328k per batch)
 
-- [ ] **Step 3: Sanity-check the outputs**
+- [x] **Step 3: Sanity-check the outputs**
 
 Run:
 ```bash
@@ -691,7 +691,7 @@ print('step7_1 outputs OK')
 ```
 Expected: `step7_1 outputs OK`
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 cd /Users/phuongthaoduong/Project/Data_Processing
@@ -707,7 +707,7 @@ git commit -m "feat: add step 7.1 train/eval split with label-maturity accountin
 - Create: `pipeline/step7_2_drift_baselines.py`
 - Output: `profiling_output/initial_model_L1.json`, `initial_model_L2.json`, `feature_importance.csv`, `psi_reference.json`, `psi_batch_distributions.csv`, `step7_2_drift_summary.txt`
 
-- [ ] **Step 1: Write the script**
+- [x] **Step 1: Write the script**
 
 `pipeline/step7_2_drift_baselines.py`:
 ```python
@@ -912,7 +912,7 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 2: Run the script**
+- [x] **Step 2: Run the script**
 
 Run:
 ```bash
@@ -924,7 +924,7 @@ Expected (takes a few minutes — trains two XGBoost models on ~1.9–2.5M rows 
 - `recency` expected among the top features by gain
 - PSI values mostly < 0.2 for near-in-time batches; values generally increasing with distance from the reference batch
 
-- [ ] **Step 3: Sanity-check the outputs**
+- [x] **Step 3: Sanity-check the outputs**
 
 Run:
 ```bash
@@ -948,7 +948,7 @@ print('step7_2 outputs OK')
 ```
 Expected: `step7_2 outputs OK`
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 cd /Users/phuongthaoduong/Project/Data_Processing
@@ -964,7 +964,7 @@ git commit -m "feat: add step 7.2 initial models, feature importances, and PSI b
 - Create: `pipeline/step7_3_preprocessing_log.py`
 - Output: `docs/preprocessing_log.md`
 
-- [ ] **Step 1: Write the script**
+- [x] **Step 1: Write the script**
 
 `pipeline/step7_3_preprocessing_log.py`:
 ```python
@@ -1171,7 +1171,7 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 2: Run the script**
+- [x] **Step 2: Run the script**
 
 Run:
 ```bash
@@ -1179,14 +1179,14 @@ cd /Users/phuongthaoduong/Project/Data_Processing/pipeline && python3 step7_3_pr
 ```
 Expected: `Wrote .../docs/preprocessing_log.md (...)`. Counting rows in the exclusion logs may take ~a minute if they are large.
 
-- [ ] **Step 3: Review the generated log**
+- [x] **Step 3: Review the generated log**
 
 Open `docs/preprocessing_log.md` and check:
 - All four exclusion rows show numeric counts (no "MISSING")
 - Tier table columns are the actual `L2_tier` values (expect `category` and possibly `global`), percentages per row sum to ~100
 - Split table shows 20 rows; class-balance table shows 40 rows (20 batches × 2 schemes)
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 cd /Users/phuongthaoduong/Project/Data_Processing
@@ -1198,12 +1198,12 @@ git commit -m "feat: add step 7.3 consolidated preprocessing decision log"
 
 ### Task 7: Final verification
 
-- [ ] **Step 1: Run the full test suite**
+- [x] **Step 1: Run the full test suite**
 
 Run: `cd /Users/phuongthaoduong/Project/Data_Processing && python3 -m pytest tests/ -v`
 Expected: 14 passed
 
-- [ ] **Step 2: Verify all Step 7 deliverables exist**
+- [x] **Step 2: Verify all Step 7 deliverables exist**
 
 Run:
 ```bash
@@ -1215,7 +1215,7 @@ ls -lh profiling_output/train_eval_split.csv profiling_output/experiment_config.
 ```
 Expected: all 10 files listed, none zero-byte.
 
-- [ ] **Step 3: End-to-end leakage spot-check**
+- [x] **Step 3: End-to-end leakage spot-check**
 
 The critical invariant: no batch used to train an initial model has a label window extending past the first evaluation point.
 
@@ -1235,7 +1235,7 @@ print('No label leakage in initial training sets')
 ```
 Expected: `No label leakage in initial training sets`
 
-- [ ] **Step 4: Final commit**
+- [x] **Step 4: Final commit**
 
 ```bash
 git add -A
@@ -1258,3 +1258,14 @@ git commit -m "chore: complete step 7 experiment preparation" --allow-empty
 | `docs/preprocessing_log.md` | Thesis chapter 3/4 writing; reproducibility record |
 
 Out of scope for Step 7 (deliberately deferred to Phase 2): hyperparameter tuning via time-series CV, the LLM-guided-vs-RFM feature comparison, the S1–S4 strategy loop, and evaluation metrics (AUC/F1/Recall@10%, CV, Jaccard, Wilcoxon tests).
+
+## Execution record
+
+Executed 2026-08-09/10 via subagent-driven development. All tasks in this plan were carried out; every checkbox above is marked complete.
+
+Deviations from the plan as written:
+
+1. Task 4's `eligible_customers` join was simplified to `set_index().map()` on parsed dates, rather than the originally sketched merge approach.
+2. Task 6's Section-2 exclusion table was corrected to report true removal counts: 2.2 excludes 26 accounts (160,947 transactions), parsed fail-fast from `test_account_detection_summary.txt`; 2.4 excludes 611,091 orphans, parsed fail-fast from `step2_4_orphan_summary.txt` (the exclusion log itself is only a 10,000-row sample and cannot be used to derive true counts).
+3. Review-driven hardening commits were added beyond the original task list: `6b8aede` (fail loudly when L2 thresholds are missing for a batch), `d9763ed` (guard PSI against mismatched shapes and empty inputs), `db05c5e` (guard degenerate `scale_pos_weight` plus Phase-2 consumer notes), `ae59cb8` (match decision-log table precision to computed rounding).
+4. Observed results worth carrying into the thesis narrative: L1 in-sample AUC 0.8544, L2 in-sample AUC 0.8580; the L2 global fallback threshold tier never fires in practice (100% of batches resolve at a more specific tier), which is worth calling out explicitly rather than treating as a silent no-op.

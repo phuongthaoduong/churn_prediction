@@ -177,7 +177,7 @@ def main():
     tier_pct.index.name = "prediction_point"
     w("Tier share per batch (% of customers):")
     w("")
-    w(md_table(tier_pct.reset_index()))
+    w(md_table(tier_pct.reset_index(), float_fmt="{:.2f}"))
     w("")
     tau = pd.read_csv(L2_THRESHOLDS_PATH)
     stab = tau.groupby("category")["tau_c"].agg(["min", "max", "mean", "std"])
@@ -185,7 +185,7 @@ def main():
     stab = stab.round(1).reset_index()
     w("Category threshold (tau_c, days) stability across batches:")
     w("")
-    w(md_table(stab))
+    w(md_table(stab, float_fmt="{:.1f}"))
     w("")
 
     # --- 6. Class balance -------------------------------------------------
@@ -230,9 +230,10 @@ def main():
     w("")
 
     out_path = os.path.join(DOCS_DIR, "preprocessing_log.md")
+    content = "\n".join(lines) + "\n"
     with open(out_path, "w") as f:
-        f.write("\n".join(lines) + "\n")
-    print(f"Wrote {out_path} ({len(lines)} lines)")
+        f.write(content)
+    print(f"Wrote {out_path} ({len(content.splitlines())} lines)")
 
 
 if __name__ == "__main__":

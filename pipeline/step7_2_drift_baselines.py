@@ -17,11 +17,19 @@ NOTE: hyperparameters are provisional defaults (experiment_config.XGB_PARAMS).
 After Phase-2 tuning, rerun this script to regenerate importances/baselines.
 
 Notes for Phase-2 consumers:
-  (a) psi_batch_distributions.csv proportions are computed under the
-      ORIGINAL frozen edges from this script's reference batch. If S4
-      resets its reference after a retraining event, re-derive edges from
-      the new reference via drift_utils.make_bins rather than reusing
-      these rows.
+  (a) Bin edges are FROZEN from this script's reference batch for the
+      ENTIRE study, by design — they never move, even when S4 resets its
+      reference *batch* after a retraining event. This keeps PSI values
+      comparable across the whole study and matches what is persisted
+      here. When S4 resets its reference batch, do NOT re-derive edges:
+      instead compute PSI between the new reference batch's row-set and
+      the current batch's row-set, both already present in
+      psi_batch_distributions.csv under these frozen edges, i.e.
+        PSI(ref=batch_k, cur=batch_j) = compute_psi(props_k, props_j)
+      where props_k / props_j are the precomputed per-batch bin
+      proportions for batch_k / batch_j. This is exactly why the
+      per-batch table is precomputed as a lookup + sum rather than
+      re-run per reference choice.
   (b) Bin edges live in psi_reference.json, keyed by (scheme, feature) —
       join on those keys to recover edges for the CSV.
   (c) Gain values in feature_importance.csv are raw total gain, not

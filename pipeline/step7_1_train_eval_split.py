@@ -58,6 +58,15 @@ def main():
     close["role"] = close["prediction_point"].apply(
         lambda pp: "initial_train" if pp < FIRST_EVAL_PP else "evaluation"
     )
+    # `role` alone is a leakage trap: it marks a batch as "initial_train" purely
+    # by prediction_point < FIRST_EVAL_PP, regardless of whether that batch's
+    # labels are actually observable by FIRST_EVAL_PP. For L2 in particular,
+    # only 6 of the 8 initial_train batches are label-matured at the first
+    # evaluation point (longer, category-dependent label windows). Phase-2
+    # hyperparameter tuning must select training rows on these per-scheme
+    # maturity flags, not on `role`.
+    close["matured_for_L1_at_first_eval"] = close["l1_label_close"] <= FIRST_EVAL_PP
+    close["matured_for_L2_at_first_eval"] = close["l2_label_close"] <= FIRST_EVAL_PP
     eligible = batch_meta.copy()
     eligible["prediction_point"] = pd.to_datetime(eligible["prediction_point"])
     close["eligible_customers"] = close["prediction_point"].map(

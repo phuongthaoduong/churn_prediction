@@ -99,6 +99,10 @@ def main():
         os.path.join(OUTPUT_DIR, "step2_4_orphan_summary.txt"),
         r"Orphan line items removed:\s*([\d,]+)",
     )
+    (n_never_eligible,) = parse_summary_counts(
+        os.path.join(OUTPUT_DIR, "step3_temporal_summary.txt"),
+        r"Customers never eligible \(no obs window purchase\):\s*([\d,]+)",
+    )
     exclusion_rows = [
         {"Cleaning step": "2.1 Extreme financial outliers",
          "Records excluded": f"{n_21:,}",
@@ -116,6 +120,14 @@ def main():
          "Records excluded": f"{n_24:,}",
          "Log file": "`exclusion_log_step2_4.csv`",
          "Log contents": "10,000-row sample"},
+        {"Cleaning step": "3. Never-eligible customers (no purchase in any observation window)",
+         "Records excluded": f"{n_never_eligible:,} customers",
+         "Log file": "`step3_temporal_summary.txt`",
+         "Log contents": "summary count only"},
+        {"Cleaning step": "5. Unmapped merchants (no industry mapping)",
+         "Records excluded": "not persisted",
+         "Log file": "n/a",
+         "Log contents": "see `step5_label_construction.py`"},
     ]
     w(md_table(pd.DataFrame(exclusion_rows)))
     w("")
@@ -125,7 +137,15 @@ def main():
       "record — 2.2 logs one row per removed *account* (each covering many "
       "transactions) and 2.4 is a fixed-size sample of a larger removal; "
       "true removal counts are parsed from the corresponding summary text "
-      "files, not from `count_rows` on those two logs.")
+      "files, not from `count_rows` on those two logs. The Step 3 row is "
+      "mandated by the methodology: customers with no purchase in the "
+      "observation window are excluded from scoring (excluded from batch "
+      "eligibility, not from the raw sales data). The Step 5 row records "
+      "IPIs dropped for merchants absent from `industry_servereid.csv`; "
+      "`step5_label_construction.py` logs this count to stdout at run "
+      "time (`compute_l2_thresholds`) but does not persist it to any "
+      "`profiling_output` artifact, so no number is reported here — see "
+      "that script if an exact count is needed.")
     w("")
 
     # --- 3. Window choices ------------------------------------------------
@@ -179,6 +199,27 @@ def main():
     w("")
     w(md_table(tier_pct.reset_index(), float_fmt="{:.2f}"))
     w("")
+
+    # Global-fallback tier check: L2_tier is "category" unless a category's
+    # pooled IPI count falls below the minimum, in which case labeling falls
+    # back to the global-pooled threshold. Compute the fired share directly
+    # from the tiers dataframe (not hardcoded) and assert it agrees with the
+    # tier table above before asserting the narrative sentence.
+    non_category_cols = [c for c in tier_pct.columns if c != "category"]
+    assert not non_category_cols or (tier_pct[non_category_cols].fillna(0) == 0).all().all(), (
+        "Tier table shows a nonzero non-category tier share — the global-fallback "
+        "narrative below no longer matches the data and must be rewritten."
+    )
+    global_fallback_pct = (tiers["L2_tier"] != "category").mean() * 100
+    n_tier_batches = tiers["prediction_point"].nunique()
+    assert round(global_fallback_pct, 2) == 0.00, (
+        f"Global-fallback tier fired for {global_fallback_pct:.2f}% of rows — "
+        "update the Section 5 narrative to reflect this."
+    )
+    w(f"The global-fallback tier fired for **{global_fallback_pct:.2f}%** of "
+      f"customer-batch rows in all {n_tier_batches} batches — every category "
+      "cleared the minimum pooled-IPI requirement at every prediction point.")
+    w("")
     tau = pd.read_csv(L2_THRESHOLDS_PATH)
     stab = tau.groupby("category")["tau_c"].agg(["min", "max", "mean", "std"])
     stab["cv_pct"] = (stab["std"] / stab["mean"] * 100).round(1)
@@ -213,6 +254,9 @@ def main():
         w(f"- **{s}**: reference batch {ref[s]['reference_pp']}, in-sample AUC "
           f"{ref[s]['train_auc_in_sample']:.4f} (provisional hyperparameters), "
           f"monitored features: {', '.join(ref[s]['monitored_features'])}.")
+    w("- PSI bin edges are frozen from the Step-7.2 reference batches for the "
+      "entire study; reference resets in S4 reuse the precomputed per-batch "
+      "distributions under these edges.")
     w("")
 
     # --- 8. Deviations ----------------------------------------------------

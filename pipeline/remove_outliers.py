@@ -34,7 +34,7 @@ from datetime import datetime
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "sale_data")
 SALES_PATH = os.path.join(DATA_DIR, "srv_sales.csv")
 SALEITEMS_PATH = os.path.join(DATA_DIR, "srv_saleitems.csv")
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output", "step2_cleaning")
 CHUNK_SIZE = 500_000
 
 # Upper bound: any record with |bill_amt| or |amt| above this is removed.

@@ -1,5 +1,7 @@
 """Generate weekly_report_step7.docx from the markdown content."""
 
+import os
+
 from docx import Document
 from docx.shared import Pt, Inches, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -861,7 +863,7 @@ def main():
     p.paragraph_format.space_after = Pt(6)
 
     # Save
-    out_path = "docs/weekly_report_step7.docx"
+    out_path = os.path.join(os.path.dirname(__file__), "weekly_report_step7.docx")
     doc.save(out_path)
     print(f"Saved {out_path}")
 

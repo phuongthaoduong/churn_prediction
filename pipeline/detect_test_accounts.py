@@ -34,7 +34,7 @@ from collections import defaultdict
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output", "step2_cleaning")
 SALES_PATH = os.path.join(OUTPUT_DIR, "srv_sales_step2_1.parquet")
 BATCH_SIZE = 500_000
 

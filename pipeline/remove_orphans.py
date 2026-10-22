@@ -28,7 +28,7 @@ from datetime import datetime
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output", "step2_cleaning")
 SALES_PATH = os.path.join(OUTPUT_DIR, "srv_sales_step2_3.parquet")
 SALEITEMS_PATH = os.path.join(OUTPUT_DIR, "srv_saleitems_step2_3.parquet")
 BATCH_SIZE = 500_000

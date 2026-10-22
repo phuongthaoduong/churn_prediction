@@ -11,8 +11,8 @@ from docx.oxml import parse_xml
 import os
 
 _PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
-INPUT = os.path.join(_PROJECT_ROOT, "docs", "weekly_report_step2.md")
-OUTPUT = os.path.join(_PROJECT_ROOT, "profiling_output", "weekly_report_step2_cleaning.docx")
+INPUT = os.path.join(_PROJECT_ROOT, "docs", "reports", "step2", "weekly_report_step2.md")
+OUTPUT = os.path.join(_PROJECT_ROOT, "profiling_output", "step2_cleaning", "weekly_report_step2_cleaning.docx")
 
 FONT_NAME = "Times New Roman"
 FONT_SIZE_BODY = Pt(11)

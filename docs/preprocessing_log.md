@@ -1,6 +1,6 @@
 # Preprocessing Decision Log
 
-Generated: 2026-08-10 00:17:38 by `pipeline/step7_3_preprocessing_log.py`. Regenerate after any pipeline rerun — do not edit by hand.
+Generated: 2026-10-18 22:25:55 by `pipeline/preprocessing_log.py`. Regenerate after any pipeline rerun — do not edit by hand.
 
 ## 1. Data scope
 
@@ -17,9 +17,9 @@ Generated: 2026-08-10 00:17:38 by `pipeline/step7_3_preprocessing_log.py`. Regen
 | 2.3 Returns and corrections | 1,308,639 | `exclusion_log_step2_3.csv` | complete |
 | 2.4 Orphan line items | 611,091 | `exclusion_log_step2_4.csv` | 10,000-row sample |
 | 3. Never-eligible customers (no purchase in any observation window) | 80,210 customers | `step3_temporal_summary.txt` | summary count only |
-| 5. Unmapped merchants (no industry mapping) | not persisted | n/a | see `step5_label_construction.py` |
+| 5. Unmapped merchants (no industry mapping) | not persisted | n/a | see `label_construction.py` |
 
-Per-step rationale is recorded in the corresponding `profiling_output/step2_*_summary.txt` / analysis reports. Note: the 2.2 and 2.4 log files above do not contain one row per excluded record — 2.2 logs one row per removed *account* (each covering many transactions) and 2.4 is a fixed-size sample of a larger removal; true removal counts are parsed from the corresponding summary text files, not from `count_rows` on those two logs. The Step 3 row is mandated by the methodology: customers with no purchase in the observation window are excluded from scoring (excluded from batch eligibility, not from the raw sales data). The Step 5 row records IPIs dropped for merchants absent from `industry_servereid.csv`; `step5_label_construction.py` logs this count to stdout at run time (`compute_l2_thresholds`) but does not persist it to any `profiling_output` artifact, so no number is reported here — see that script if an exact count is needed.
+Per-step rationale is recorded in the corresponding `profiling_output/step2_*_summary.txt` / analysis reports. Note: the 2.2 and 2.4 log files above do not contain one row per excluded record — 2.2 logs one row per removed *account* (each covering many transactions) and 2.4 is a fixed-size sample of a larger removal; true removal counts are parsed from the corresponding summary text files, not from `count_rows` on those two logs. The Step 3 row is mandated by the methodology: customers with no purchase in the observation window are excluded from scoring (excluded from batch eligibility, not from the raw sales data). The Step 5 row records IPIs dropped for merchants absent from `industry_servereid.csv`; `label_construction.py` logs this count to stdout at run time (`compute_l2_thresholds`) but does not persist it to any `profiling_output` artifact, so no number is reported here — see that script if an exact count is needed.
 
 ## 3. Window-length choices and justification (Steps 3 & 5)
 
@@ -166,5 +166,5 @@ Category threshold (tau_c, days) stability across batches:
 
 - **L2 tier design**: Data_Preprocessing_Plan.md §5.2 described a 3-tier scheme (customer/store/category). The implemented scheme is the thesis's 2-tier category + global-fallback design (eq. 3.6–3.7), which pools IPIs at category level for statistical stability.
 - **Zero bill_amt records retained** in Step 2.3 (only negative-amount returns removed); see `step2_3_returns_analysis.txt`.
-- **Hyperparameters provisional**: initial models in Step 7.2 use documented defaults; Phase 2 tunes once via time-series CV on the initial training period, then rerun `step7_2_drift_baselines.py`.
+- **Hyperparameters provisional**: initial models in Step 7.2 use documented defaults; Phase 2 tunes once via time-series CV on the initial training period, then rerun `drift_baselines.py`.
 

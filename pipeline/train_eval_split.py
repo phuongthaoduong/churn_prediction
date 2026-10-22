@@ -11,14 +11,14 @@ observable (label-maturity rule), and snapshots all experiment constants to
 experiment_config.json for reproducibility.
 
 Input:
-  - profiling_output/batch_metadata.csv
-  - profiling_output/l2_thresholds.csv
-  - profiling_output/dataset_final.parquet   (row counts per role)
+  - profiling_output/step3_temporal/batch_metadata.csv
+  - profiling_output/step5_labels/l2_thresholds.csv
+  - profiling_output/step6_dataset/dataset_final.parquet   (row counts per role)
 
 Output:
-  - profiling_output/train_eval_split.csv
-  - profiling_output/experiment_config.json
-  - profiling_output/step7_1_split_summary.txt
+  - profiling_output/step7_split_drift/train_eval_split.csv
+  - profiling_output/step7_split_drift/experiment_config.json
+  - profiling_output/step7_split_drift/step7_1_split_summary.txt
 """
 
 import json
@@ -39,11 +39,11 @@ from experiment_config import (
     MONITOR_EXCLUDE,
     N_MONITORED_FEATURES,
     N_PSI_BINS,
-    OUTPUT_DIR,
     PSI_EPSILON,
     PSI_THRESHOLD,
     RECALL_AT_K_PCT,
     ROLLING_WINDOW_MONTHS,
+    STEP7_DIR,
     XGB_PARAMS,
     label_close_dates,
     usable_batches,
@@ -78,7 +78,8 @@ def main():
     counts = pps["prediction_point"].value_counts()
     close["n_rows"] = close["prediction_point"].map(counts).astype("Int64")
 
-    split_path = os.path.join(OUTPUT_DIR, "train_eval_split.csv")
+    os.makedirs(STEP7_DIR, exist_ok=True)
+    split_path = os.path.join(STEP7_DIR, "train_eval_split.csv")
     close.to_csv(split_path, index=False)
 
     # Batches usable for the initial models (trained at FIRST_EVAL_PP)
@@ -104,7 +105,7 @@ def main():
         "xgb_params_provisional": XGB_PARAMS,
         "class_balance_source": os.path.basename(CLASS_BALANCE),
     }
-    config_path = os.path.join(OUTPUT_DIR, "experiment_config.json")
+    config_path = os.path.join(STEP7_DIR, "experiment_config.json")
     with open(config_path, "w") as f:
         json.dump(config, f, indent=2)
 
@@ -148,7 +149,7 @@ def main():
     w("=" * 70)
 
     report = "\n".join(lines)
-    with open(os.path.join(OUTPUT_DIR, "step7_1_split_summary.txt"), "w") as f:
+    with open(os.path.join(STEP7_DIR, "step7_1_split_summary.txt"), "w") as f:
         f.write(report + "\n")
     print(report)
 

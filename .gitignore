@@ -8,6 +8,3 @@ experiment_output/
 __pycache__/
 *.pyc
 .pytest_cache/
-
-# Stray placeholder file at repo root
-/training

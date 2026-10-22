@@ -35,9 +35,13 @@ from collections import defaultdict
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
-SALES_PATH = os.path.join(OUTPUT_DIR, "srv_sales_step2_3.parquet")
-BATCH_ASSIGN_PATH = os.path.join(OUTPUT_DIR, "batch_assignments.parquet")
+PROFILING_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
+STEP2_DIR = os.path.join(PROFILING_DIR, "step2_cleaning")
+STEP3_DIR = os.path.join(PROFILING_DIR, "step3_temporal")
+OUTPUT_DIR = os.path.join(PROFILING_DIR, "step5_labels")
+
+SALES_PATH = os.path.join(STEP2_DIR, "srv_sales_step2_3.parquet")
+BATCH_ASSIGN_PATH = os.path.join(STEP3_DIR, "batch_assignments.parquet")
 INDUSTRY_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "sale_data", "industry_servereid.csv")
 
 LABEL_OUTPUT_PATH = os.path.join(OUTPUT_DIR, "label_table.parquet")

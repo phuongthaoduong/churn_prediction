@@ -10,8 +10,8 @@ Validation invariant: a customer silent for 60 days was silent for 30, so
 label_eval == 1 implies label_L1 == 1 (label_eval <= label_L1 elementwise).
 
 Input:
-  - profiling_output/dataset_final.parquet   (keys + label_L1 for validation)
-  - profiling_output/srv_sales_step2_3.parquet (cleaned sales)
+  - profiling_output/step6_dataset/dataset_final.parquet   (keys + label_L1 for validation)
+  - profiling_output/step2_cleaning/srv_sales_step2_3.parquet (cleaned sales)
 
 Output:
   - experiment_output/eval_labels.parquet  (keys + label_eval)

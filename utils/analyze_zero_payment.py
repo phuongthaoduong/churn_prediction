@@ -23,7 +23,7 @@ from datetime import datetime
 # ---------------------------------------------------------------------------
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "sale_data")
 SALES_PATH = os.path.join(DATA_DIR, "srv_sales.csv")
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output", "step1_profiling")
 CHUNK_SIZE = 500_000
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)

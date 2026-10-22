@@ -24,7 +24,7 @@ from collections import defaultdict
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "sale_data")
 SALES_PATH = os.path.join(DATA_DIR, "srv_sales.csv")
 SALEITEMS_PATH = os.path.join(DATA_DIR, "srv_saleitems.csv")
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
+OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output", "step1_profiling")
 CHUNK_SIZE = 500_000  # rows per chunk
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)

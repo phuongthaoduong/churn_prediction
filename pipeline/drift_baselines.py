@@ -36,16 +36,16 @@ Notes for Phase-2 consumers:
       normalized.
 
 Input:
-  - profiling_output/dataset_final.parquet
-  - profiling_output/batch_metadata.csv
-  - profiling_output/l2_thresholds.csv
+  - profiling_output/step6_dataset/dataset_final.parquet
+  - profiling_output/step3_temporal/batch_metadata.csv
+  - profiling_output/step5_labels/l2_thresholds.csv
 
 Output:
-  - profiling_output/initial_model_L1.json / initial_model_L2.json
-  - profiling_output/feature_importance.csv
-  - profiling_output/psi_reference.json
-  - profiling_output/psi_batch_distributions.csv
-  - profiling_output/step7_2_drift_summary.txt
+  - profiling_output/step7_split_drift/initial_model_L1.json / initial_model_L2.json
+  - profiling_output/step7_split_drift/feature_importance.csv
+  - profiling_output/step7_split_drift/psi_reference.json
+  - profiling_output/step7_split_drift/psi_batch_distributions.csv
+  - profiling_output/step7_split_drift/step7_2_drift_summary.txt
 """
 
 import json
@@ -67,8 +67,8 @@ from experiment_config import (
     MONITOR_EXCLUDE,
     N_MONITORED_FEATURES,
     N_PSI_BINS,
-    OUTPUT_DIR,
     PSI_EPSILON,
+    STEP7_DIR,
     XGB_PARAMS,
     label_close_dates,
     usable_batches,
@@ -78,6 +78,7 @@ SCHEMES = ("L1", "L2")
 
 
 def main():
+    os.makedirs(STEP7_DIR, exist_ok=True)
     df = pd.read_parquet(DATASET_FINAL)
     batch_meta = pd.read_csv(BATCH_METADATA)
     l2_thresholds = pd.read_csv(L2_THRESHOLDS_PATH)
@@ -112,7 +113,7 @@ def main():
         model.fit(X, y)
         train_auc = roc_auc_score(y, model.predict_proba(X)[:, 1])
 
-        model_path = os.path.join(OUTPUT_DIR, f"initial_model_{scheme}.json")
+        model_path = os.path.join(STEP7_DIR, f"initial_model_{scheme}.json")
         model.save_model(model_path)
 
         gains = model.get_booster().get_score(importance_type="gain")
@@ -198,12 +199,12 @@ def main():
               f"{psi_vs_ref[worst][pp]:.4f}  ({worst})")
 
     pd.concat(importance_rows).to_csv(
-        os.path.join(OUTPUT_DIR, "feature_importance.csv"), index=False
+        os.path.join(STEP7_DIR, "feature_importance.csv"), index=False
     )
-    with open(os.path.join(OUTPUT_DIR, "psi_reference.json"), "w") as f:
+    with open(os.path.join(STEP7_DIR, "psi_reference.json"), "w") as f:
         json.dump(psi_reference, f, indent=2)
     pd.DataFrame(dist_rows).to_csv(
-        os.path.join(OUTPUT_DIR, "psi_batch_distributions.csv"), index=False
+        os.path.join(STEP7_DIR, "psi_batch_distributions.csv"), index=False
     )
 
     w("")
@@ -216,7 +217,7 @@ def main():
     w("=" * 70)
 
     report = "\n".join(summary)
-    with open(os.path.join(OUTPUT_DIR, "step7_2_drift_summary.txt"), "w") as f:
+    with open(os.path.join(STEP7_DIR, "step7_2_drift_summary.txt"), "w") as f:
         f.write(report + "\n")
     print(report)
 

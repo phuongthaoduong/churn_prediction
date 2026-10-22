@@ -14,8 +14,9 @@ skipped, so the script can be interrupted freely.
 Only scale_pos_weight is recomputed per fit (thesis eq. 3.8); everything
 else in a combo is frozen across folds.
 
-Input:  profiling_output/dataset_final.parquet, batch_metadata.csv,
-        l2_thresholds.csv
+Input:  profiling_output/step6_dataset/dataset_final.parquet,
+        profiling_output/step3_temporal/batch_metadata.csv,
+        profiling_output/step5_labels/l2_thresholds.csv
 Output: experiment_output/tuning_results.csv, tuned_params.json,
         step8_1_tuning_summary.txt
 """

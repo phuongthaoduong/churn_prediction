@@ -26,7 +26,9 @@ from experiment_config import (
     DOCS_DIR,
     FIRST_EVAL_PP,
     L2_THRESHOLDS_PATH,
-    OUTPUT_DIR,
+    STEP2_DIR,
+    STEP3_DIR,
+    STEP7_DIR,
 )
 
 def count_rows(path):
@@ -72,7 +74,7 @@ def main():
     w("# Preprocessing Decision Log")
     w("")
     w(f"Generated: {datetime.now():%Y-%m-%d %H:%M:%S} by "
-      "`pipeline/step7_3_preprocessing_log.py`. Regenerate after any "
+      "`pipeline/preprocessing_log.py`. Regenerate after any "
       "pipeline rerun — do not edit by hand.")
     w("")
 
@@ -89,18 +91,18 @@ def main():
     # --- 2. Exclusions ----------------------------------------------------
     w("## 2. Exclusion criteria and affected record counts (Step 2)")
     w("")
-    n_21 = count_rows(os.path.join(OUTPUT_DIR, "exclusion_log_step2_1.csv"))
-    n_23 = count_rows(os.path.join(OUTPUT_DIR, "exclusion_log_step2_3.csv"))
+    n_21 = count_rows(os.path.join(STEP2_DIR, "exclusion_log_step2_1.csv"))
+    n_23 = count_rows(os.path.join(STEP2_DIR, "exclusion_log_step2_3.csv"))
     n_accounts_22, n_txn_22 = parse_summary_counts(
-        os.path.join(OUTPUT_DIR, "test_account_detection_summary.txt"),
+        os.path.join(STEP2_DIR, "test_account_detection_summary.txt"),
         r"REMOVE:\s*([\d,]+) customers,\s*([\d,]+) transactions",
     )
     (n_24,) = parse_summary_counts(
-        os.path.join(OUTPUT_DIR, "step2_4_orphan_summary.txt"),
+        os.path.join(STEP2_DIR, "step2_4_orphan_summary.txt"),
         r"Orphan line items removed:\s*([\d,]+)",
     )
     (n_never_eligible,) = parse_summary_counts(
-        os.path.join(OUTPUT_DIR, "step3_temporal_summary.txt"),
+        os.path.join(STEP3_DIR, "step3_temporal_summary.txt"),
         r"Customers never eligible \(no obs window purchase\):\s*([\d,]+)",
     )
     exclusion_rows = [
@@ -127,7 +129,7 @@ def main():
         {"Cleaning step": "5. Unmapped merchants (no industry mapping)",
          "Records excluded": "not persisted",
          "Log file": "n/a",
-         "Log contents": "see `step5_label_construction.py`"},
+         "Log contents": "see `label_construction.py`"},
     ]
     w(md_table(pd.DataFrame(exclusion_rows)))
     w("")
@@ -142,7 +144,7 @@ def main():
       "observation window are excluded from scoring (excluded from batch "
       "eligibility, not from the raw sales data). The Step 5 row records "
       "IPIs dropped for merchants absent from `industry_servereid.csv`; "
-      "`step5_label_construction.py` logs this count to stdout at run "
+      "`label_construction.py` logs this count to stdout at run "
       "time (`compute_l2_thresholds`) but does not persist it to any "
       "`profiling_output` artifact, so no number is reported here — see "
       "that script if an exact count is needed.")
@@ -167,14 +169,14 @@ def main():
     w("## 4. Train/evaluation split (Step 7.1)")
     w("")
     split = pd.read_csv(
-        os.path.join(OUTPUT_DIR, "train_eval_split.csv"),
+        os.path.join(STEP7_DIR, "train_eval_split.csv"),
         parse_dates=["prediction_point", "l1_label_close", "l2_label_close"],
     )
     for col in ("prediction_point", "l1_label_close", "l2_label_close"):
         split[col] = split[col].dt.strftime("%Y-%m-%d")
     w(md_table(split))
     w("")
-    cfg = json.load(open(os.path.join(OUTPUT_DIR, "experiment_config.json")))
+    cfg = json.load(open(os.path.join(STEP7_DIR, "experiment_config.json")))
     w(f"- First evaluation point: **{cfg['first_eval_pp']}** — "
       f"{cfg['n_batches_initial_train']} initial-training batches, "
       f"{cfg['n_batches_evaluation']} evaluation batches (one year).")
@@ -243,7 +245,7 @@ def main():
     # --- 7. Drift monitoring ----------------------------------------------
     w("## 7. Drift-monitoring configuration (Step 7.2)")
     w("")
-    ref = json.load(open(os.path.join(OUTPUT_DIR, "psi_reference.json")))
+    ref = json.load(open(os.path.join(STEP7_DIR, "psi_reference.json")))
     w(f"- PSI: {cfg['n_psi_bins']} equal-frequency bins + dedicated "
       f"missing-value bin, epsilon = {cfg['psi_epsilon']}, trigger threshold "
       f"= {cfg['psi_threshold_S4']}.")
@@ -270,7 +272,7 @@ def main():
       "returns removed); see `step2_3_returns_analysis.txt`.")
     w("- **Hyperparameters provisional**: initial models in Step 7.2 use "
       "documented defaults; Phase 2 tunes once via time-series CV on the "
-      "initial training period, then rerun `step7_2_drift_baselines.py`.")
+      "initial training period, then rerun `drift_baselines.py`.")
     w("")
 
     out_path = os.path.join(DOCS_DIR, "preprocessing_log.md")

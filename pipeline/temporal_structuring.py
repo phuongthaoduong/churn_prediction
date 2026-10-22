@@ -33,8 +33,10 @@ from collections import defaultdict
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
-SALES_PATH = os.path.join(OUTPUT_DIR, "srv_sales_step2_3.parquet")
+PROFILING_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
+INPUT_DIR = os.path.join(PROFILING_DIR, "step2_cleaning")
+OUTPUT_DIR = os.path.join(PROFILING_DIR, "step3_temporal")
+SALES_PATH = os.path.join(INPUT_DIR, "srv_sales_step2_3.parquet")
 BATCH_SIZE = 500_000
 
 OBS_WINDOW_DAYS = 90       # observation window length

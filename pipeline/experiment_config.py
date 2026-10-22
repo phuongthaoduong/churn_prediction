@@ -18,10 +18,18 @@ PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT_DIR = os.path.join(PROJECT_DIR, "profiling_output")
 DOCS_DIR = os.path.join(PROJECT_DIR, "docs")
 
-DATASET_FINAL = os.path.join(OUTPUT_DIR, "dataset_final.parquet")
-BATCH_METADATA = os.path.join(OUTPUT_DIR, "batch_metadata.csv")
-L2_THRESHOLDS_PATH = os.path.join(OUTPUT_DIR, "l2_thresholds.csv")
-CLASS_BALANCE = os.path.join(OUTPUT_DIR, "class_balance.csv")
+# profiling_output/ is organized by pipeline step (see pipeline/PIPELINE.md).
+STEP2_DIR = os.path.join(OUTPUT_DIR, "step2_cleaning")
+STEP3_DIR = os.path.join(OUTPUT_DIR, "step3_temporal")
+STEP4_DIR = os.path.join(OUTPUT_DIR, "step4_features")
+STEP5_DIR = os.path.join(OUTPUT_DIR, "step5_labels")
+STEP6_DIR = os.path.join(OUTPUT_DIR, "step6_dataset")
+STEP7_DIR = os.path.join(OUTPUT_DIR, "step7_split_drift")
+
+DATASET_FINAL = os.path.join(STEP6_DIR, "dataset_final.parquet")
+BATCH_METADATA = os.path.join(STEP3_DIR, "batch_metadata.csv")
+L2_THRESHOLDS_PATH = os.path.join(STEP5_DIR, "l2_thresholds.csv")
+CLASS_BALANCE = os.path.join(STEP6_DIR, "class_balance.csv")
 
 # ---------------------------------------------------------------------------
 # Temporal split
@@ -133,10 +141,10 @@ def usable_batches(t, scheme: str, close_dates: pd.DataFrame) -> list:
 # ---------------------------------------------------------------------------
 EXPERIMENT_DIR = os.path.join(PROJECT_DIR, "experiment_output")
 
-CLEANED_SALES = os.path.join(OUTPUT_DIR, "srv_sales_step2_3.parquet")
-TRAIN_EVAL_SPLIT = os.path.join(OUTPUT_DIR, "train_eval_split.csv")
-PSI_REFERENCE_PATH = os.path.join(OUTPUT_DIR, "psi_reference.json")
-PSI_DISTRIBUTIONS_PATH = os.path.join(OUTPUT_DIR, "psi_batch_distributions.csv")
+CLEANED_SALES = os.path.join(STEP2_DIR, "srv_sales_step2_3.parquet")
+TRAIN_EVAL_SPLIT = os.path.join(STEP7_DIR, "train_eval_split.csv")
+PSI_REFERENCE_PATH = os.path.join(STEP7_DIR, "psi_reference.json")
+PSI_DISTRIBUTIONS_PATH = os.path.join(STEP7_DIR, "psi_batch_distributions.csv")
 
 EVAL_LABELS_PATH = os.path.join(EXPERIMENT_DIR, "eval_labels.parquet")
 TUNING_RESULTS_PATH = os.path.join(EXPERIMENT_DIR, "tuning_results.csv")

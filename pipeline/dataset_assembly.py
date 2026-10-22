@@ -23,9 +23,13 @@ from datetime import datetime
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
-FEATURE_PATH = os.path.join(OUTPUT_DIR, "feature_matrix.parquet")
-LABEL_PATH = os.path.join(OUTPUT_DIR, "label_table.parquet")
+PROFILING_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
+STEP4_DIR = os.path.join(PROFILING_DIR, "step4_features")
+STEP5_DIR = os.path.join(PROFILING_DIR, "step5_labels")
+OUTPUT_DIR = os.path.join(PROFILING_DIR, "step6_dataset")
+
+FEATURE_PATH = os.path.join(STEP4_DIR, "feature_matrix.parquet")
+LABEL_PATH = os.path.join(STEP5_DIR, "label_table.parquet")
 
 DATASET_OUTPUT_PATH = os.path.join(OUTPUT_DIR, "dataset_final.parquet")
 CLASS_BALANCE_PATH = os.path.join(OUTPUT_DIR, "class_balance.csv")

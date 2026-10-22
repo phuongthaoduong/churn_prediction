@@ -1,0 +1,64 @@
+========================================================================
+STEP 8.5: STATISTICAL ANALYSIS OF THE FACTORIAL EVALUATION
+========================================================================
+
+Primary arm (scheme maturity): 96 batch-level rows (8 conditions x 12 batches). Equalized arm: 96 rows.
+
+------------------------------------------------------------------------
+STEP 2: ASSUMPTION ASSESSMENT (primary arm, AUC_shared)
+------------------------------------------------------------------------
+Shapiro-Wilk on residuals of the reference additive model: W = 0.7978, p = 3.74e-10 (n = 96).
+Mauchly's sphericity test on the 8-condition x 12-batch matrix: W = 9.609e-07, chi2(27) = 117.111, p = 3.412e-13. With p = k-1 = 7 contrast dimensions estimated from only n-1 = 11 covariance degrees of freedom, this test is acknowledged to be underpowered/unstable at this sample size — reported as a diagnostic, not as a gate on which branch of the protocol is taken (that branch is decided in advance per the Step 7 pre-registration, which expects violation at n = 12).
+
+Parametric reference model (two-way RM-ANOVA, batch as blocking factor), reported for completeness though its assumptions are not tenable:
+  C(scheme): F(1, 77) = 0.355, p = 0.5533
+  C(strategy): F(3, 77) = 3.910, p = 0.01179
+  C(scheme):C(strategy): F(3, 77) = 0.259, p = 0.8545
+
+------------------------------------------------------------------------
+STEP 3: ART-ANOVA OMNIBUS TESTS (primary arm, AUC_shared)
+------------------------------------------------------------------------
+Main effect A (scheme): F(1, 77) = 9.340, p = 0.00308, partial eta^2 = 0.1082
+Main effect B (strategy): F(3, 77) = 10.243, p = 9.447e-06, partial eta^2 = 0.2852
+A x B interaction (confirmatory): F(3, 77) = 0.517, p = 0.6716, partial eta^2 = 0.0198
+
+Interaction is NOT significant at alpha = 0.05 -> branch 4b of the protocol.
+
+------------------------------------------------------------------------
+STEP 4: POST-HOC DECOMPOSITION
+------------------------------------------------------------------------
+
+Factor B (strategy) main-effect contrasts, pooled across schemes, Holm over 6 tests:
+  S1 vs S2 (pooled across schemes): median(diff) = -0.0004 [-0.0006, -0.0002], r_rb = -0.668, p_raw = 0.004685, p_holm = 0.01405, reject = True
+  S1 vs S3 (pooled across schemes): median(diff) = +0.0002 [-0.0001, +0.0006], r_rb = +0.233, p_raw = 0.3305, p_holm = 0.5547, reject = False
+  S1 vs S4 (pooled across schemes): median(diff) = +0.0004 [+0.0001, +0.0005], r_rb = +0.767, p_raw = 0.0004945, p_holm = 0.001978, reject = True
+  S2 vs S3 (pooled across schemes): median(diff) = +0.0005 [+0.0004, +0.0009], r_rb = +0.947, p_raw = 2.98e-06, p_holm = 1.788e-05, reject = True
+  S2 vs S4 (pooled across schemes): median(diff) = +0.0009 [+0.0005, +0.0011], r_rb = +0.853, p_raw = 6.39e-05, p_holm = 0.0003195, reject = True
+  S3 vs S4 (pooled across schemes): median(diff) = +0.0000 [-0.0000, +0.0005], r_rb = +0.286, p_raw = 0.2774, p_holm = 0.5547, reject = False
+
+Factor A (scheme) main effect (no decomposition needed, 2 levels): median(L1-L2) = -0.0005 [-0.0009, -0.0001], r_rb = -0.425, p = 0.009612
+
+------------------------------------------------------------------------
+PRIMARY VS. SENSITIVITY (EQUALIZED) ARM
+------------------------------------------------------------------------
+Equalized arm ART-ANOVA: A p = 4.917e-06, B p = 1.014e-07, A x B p = 0.5952 (interaction not significant, matching primary = True).
+Maximum |equalized - scheme| mean-AUC delta across the 8 conditions: 0.0011.
+
+------------------------------------------------------------------------
+ROBUSTNESS CHECKS
+------------------------------------------------------------------------
+(a) Recall@10% as response: A p = 0.0003819, B p = 0.002485, A x B p = 0.5363 (interaction not significant).
+(b) Excluding the final batch (2026-03-01, n = 88 rows): A p = 1.953e-05, B p = 6.906e-05, A x B p = 0.338 (interaction not significant, matching full-data conclusion = True).
+(c) Trajectory plot saved to trajectory_plot.png.
+
+------------------------------------------------------------------------
+COST-PERFORMANCE FRONTIER (descriptive, primary arm)
+------------------------------------------------------------------------
+  L1 S1: mean AUC = 0.8518, retrains = 0, fit time = 0.0s, rows processed = 0
+  L1 S2: mean AUC = 0.8521, retrains = 11, fit time = 407.0s, rows processed = 48,779,305
+  L1 S3: mean AUC = 0.8512, retrains = 11, fit time = 190.3s, rows processed = 20,712,614
+  L1 S4: mean AUC = 0.8510, retrains = 1, fit time = 14.5s, rows processed = 1,593,865
+  L2 S1: mean AUC = 0.8516, retrains = 0, fit time = 0.0s, rows processed = 0
+  L2 S2: mean AUC = 0.8525, retrains = 11, fit time = 356.1s, rows processed = 42,093,397
+  L2 S3: mean AUC = 0.8514, retrains = 11, fit time = 83.6s, rows processed = 14,026,706
+  L2 S4: mean AUC = 0.8513, retrains = 1, fit time = 7.7s, rows processed = 1,281,994

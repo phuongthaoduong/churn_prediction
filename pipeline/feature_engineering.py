@@ -31,10 +31,14 @@ from datetime import datetime
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-OUTPUT_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
-SALES_PATH = os.path.join(OUTPUT_DIR, "srv_sales_step2_3.parquet")
-SALEITEMS_PATH = os.path.join(OUTPUT_DIR, "srv_saleitems_step2_4.parquet")
-BATCH_ASSIGN_PATH = os.path.join(OUTPUT_DIR, "batch_assignments.parquet")
+PROFILING_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "profiling_output")
+STEP2_DIR = os.path.join(PROFILING_DIR, "step2_cleaning")
+STEP3_DIR = os.path.join(PROFILING_DIR, "step3_temporal")
+OUTPUT_DIR = os.path.join(PROFILING_DIR, "step4_features")
+
+SALES_PATH = os.path.join(STEP2_DIR, "srv_sales_step2_3.parquet")
+SALEITEMS_PATH = os.path.join(STEP2_DIR, "srv_saleitems_step2_4.parquet")
+BATCH_ASSIGN_PATH = os.path.join(STEP3_DIR, "batch_assignments.parquet")
 
 FEATURE_OUTPUT_PATH = os.path.join(OUTPUT_DIR, "feature_matrix.parquet")
 SUMMARY_PATH = os.path.join(OUTPUT_DIR, "step4_feature_summary.txt")

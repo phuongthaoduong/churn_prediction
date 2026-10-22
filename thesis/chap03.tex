@@ -1,8 +1,9 @@
 % !TeX root = ../thuthesis-example.tex
 
-\chapter{Research Methodology}
+\chapter{Research Methodology and Results}
 % \chapter{数学符号和公式}
 \section{Research Design}
+\label{sec:research-design}
 
 As established in the research background, churn prediction in non-contractual SME retail faces three unresolved methodological problems and an unstudied interaction. First, fixed inactivity thresholds remain the dominant labeling approach, even though threshold choice can materially alter model conclusions \cite{mirkovic2022}. In SME retail, where purchase cycles differ substantially across industry categories and customer types, a single inactivity cutoff may misclassify slow-cycle customers as churned while failing to identify early disengagement among fast-cycle customers. Second, churn models are often evaluated using a single train and test split, although customer behavior and transaction patterns evolve over time. The question of when and how to update churn models has therefore received insufficient attention in applied churn prediction research \cite{imani2025}. Third, feature construction and selection is typically performed manually based on domain conventions such as RFM, without a systematic method for identifying which fields in the available data schema are predictive \cite{imani2025}. When the platform data schema contains multiple interconnected operational tables, the space of constructible features exceeds what manual inspection can reliably cover. The first two issues may also interact: when churn labels are derived from category-level purchase rhythms, aggregate behavioral shifts within an industry category can affect not only the input features but also the category-level threshold that defines the target label, creating a form of drift that has not been directly examined in prior studies.
 
@@ -213,14 +214,243 @@ and the Jaccard similarity between consecutive top-$k$ high-risk lists:
 \end{equation}
 where $R_t$ is the set of customers in the top-$k$ risk list at batch $t$. Constant reshuffling of high-risk lists erodes merchant trust, making $J_t$ a practically important diagnostic. Operational cost is measured by the number of model updates, data volume per update, and cumulative training time.
 
-Strategies are compared using the Wilcoxon signed-rank test on paired monthly results \cite{demsar2006}, because the number of batches is limited and normality assumptions may not hold. For two strategies with paired batch-level metric differences $d_1, d_2, \ldots, d_T$, pairs where $d_i = 0$ are excluded, and the remaining $N$ non-zero differences are ranked by absolute value. The test statistic is:
+\subsection{Confirmatory Inferential Protocol}
+\label{sec:confirmatory-protocol}
+
+The factorial comparison is treated as a two-way repeated-measures design, with the 12 monthly evaluation batches acting as a blocking (subject) factor and the labeling scheme (Factor A, 2 levels) and update strategy (Factor B, 4 levels) as within-block factors, yielding 96 batch-level observations (8 conditions $\times$ 12 batches). This design is pre-specified before the experiment is run, which guards against post-hoc analytic flexibility. The primary dependent variable is the batch-level AUC against the shared 60-day evaluation outcome, $Y_{ijt} = \text{AUC}_{\text{shared}}(i,j,t)$ for scheme $i$, strategy $j$, and batch $t$, so that models trained on different labels remain comparable on a common downstream criterion rather than on their own training targets. Recall@10\%, F1, and own-label AUC are carried as secondary dependent variables, and temporal stability (CV of AUC, consecutive-batch Jaccard) and operational cost (retraining count, cumulative fit time, rows processed) are analyzed descriptively, consistent with Table~\ref{tab:exp-variables}.
+
+The reference parametric specification is $Y_{ijt} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \pi_t + \varepsilon_{ijt}$, equivalently the mixed model $\text{AUC} \sim \text{scheme} \times \text{strategy} + (1 \mid \text{batch})$. Its assumptions are checked, not assumed: residual normality by the Shapiro--Wilk test and sphericity by Mauchly's test. Both are expected to fail at this sample size, since 12 temporally ordered batches are autocorrelated and a 12-batch, 8-condition design estimates a 27-parameter covariance structure from only 11 degrees of freedom, so neither test is treated as a gate on which confirmatory procedure is used; the branch taken is fixed in advance. Given the expected assumption violations, the confirmatory test of the $A \times B$ interaction, which constitutes RQ3, is conducted via the Aligned Rank Transform (ART) \citep{wobbrock2011art}: for each effect in turn, the response is aligned by subtracting the fitted values of every other effect, the aligned residuals are rank-transformed, and a repeated-measures ANOVA on the ranks yields an $F$-test for that effect alone. ART is preferred over the classical Friedman test because Friedman cannot test an interaction directly, whereas ART yields a valid non-parametric test of the interaction as well as both main effects; it is applied here as a direct Python implementation of the published alignment algorithm, since no R environment with the ARTool package was available in the analysis environment. The interaction test is the single confirmatory claim of the study; main effects are interpreted in light of it, not in isolation.
+
+Two outcomes are pre-specified. If the $A \times B$ interaction is significant, main effects are not interpreted on their own and the analysis decomposes into simple main effects: a Friedman test across strategies within each scheme, followed, where significant, by the six pairwise strategy contrasts per scheme; and four paired contrasts of scheme within each strategy. If the interaction is not significant, the two main effects are interpreted directly: a significant strategy effect is followed by the six pairwise strategy contrasts pooled across schemes, and a significant scheme effect requires no decomposition, since it has only two levels. In both branches, every pairwise contrast is tested by the exact Wilcoxon signed-rank test \cite{demsar2006} on paired batch-level differences $d_1, \ldots, d_T$ (zero differences excluded, remaining differences ranked by absolute value), with test statistic
 \begin{equation}
   W = \sum_{i=1}^{N} \operatorname{sgn}(d_i) \cdot R_i,
   \label{eq:wilcoxon}
 \end{equation}
-where $R_i$ is the rank of $|d_i|$ among all non-zero absolute differences. Given the relatively small number of monthly evaluation batches, all pairwise comparisons additionally report the median difference, the matched-pairs rank-biserial effect size:
+where $R_i$ is the rank of $|d_i|$ among the $N$ non-zero differences. Families of pairwise contrasts are corrected by Holm's sequentially rejective procedure rather than Tukey's HSD, because Tukey's method presupposes independent groups with a pooled error term, a condition violated by this paired, repeated-measures design; Holm controls the family-wise error rate at the same nominal level while remaining uniformly more powerful than a flat Bonferroni correction. Every contrast is additionally reported with the median paired difference, a 95\% confidence interval obtained by a moving-block bootstrap (block length 3, to respect the temporal autocorrelation of monthly batches), and the matched-pairs rank-biserial effect size
 \begin{equation}
   r_{rb} = \frac{W^{+} - W^{-}}{W^{+} + W^{-}},
   \label{eq:rank-biserial}
 \end{equation}
-where $W^{+}$ and $W^{-}$ are the sums of positive and negative signed ranks respectively, and bootstrap confidence intervals, so that the practical size of differences can be assessed independently of $p$-values. Rather than declaring a single best strategy, the final results are reported as a cost and performance frontier, allowing platforms to choose the most suitable strategy for their own quality and cost preferences. The final analysis examines whether the optimal update strategy changes when the churn definition changes, directly testing the interaction between the two core themes of the study.
+where $W^{+}$ and $W^{-}$ are the sums of positive and negative signed ranks, so that the practical size of a difference can be judged independently of its $p$-value.
+
+This confirmatory protocol is applied to a primary analysis arm, in which each scheme's label-maturity rule governs when labels become usable for retraining, and a sensitivity arm, in which both schemes are equalized to a uniform 90-day maturity lag. Because L1's shorter fixed label window closes earlier than L2's category-level window, the primary arm confounds the labeling scheme itself with the data recency available to each scheme at retraining time; the equalized arm isolates the labeling scheme from this recency difference. Where the two arms agree in sign and significance, effects are attributed to the labeling schemes and update strategies themselves; where they diverge, the difference in effective data lag is reported as an intrinsic operational cost of the slower-maturing scheme rather than as a statistical artifact. Three further robustness checks accompany the confirmatory analysis: repetition of the full protocol with Recall@10\% as the dependent variable, exclusion of the final evaluation batch (flagged during drift-baseline construction as an end-of-data truncation artifact, Section~\ref{sec:truncation-artifact}), and inspection of month-by-month AUC trajectories for all eight conditions, since a genuine interaction should appear as non-parallel temporal profiles. Rather than declaring a single best strategy from the confirmatory test alone, results are additionally reported as a cost and performance frontier (Section~\ref{sec:cost-frontier}), allowing platforms to weigh predictive performance against retraining cost according to their own operating constraints.
+
+\section{Experimental Results}
+
+This section reports the outcome of executing the design specified above, in the order in which the pipeline produces it: the preliminary feature-set comparison, hyperparameter tuning, the descriptive summary of the 2~$\times$~4 factorial experiment, the assumption checks that route the confirmatory analysis, the confirmatory interaction test and its post-hoc decomposition, the sensitivity arm, the three robustness checks, and the cost--performance frontier. Every figure reported below is read directly from the experiment's output artifacts (\texttt{experiment\_output/*.csv}, \texttt{*.json}) with no manual adjustment.
+
+\subsection{Preliminary Results: Feature Set Comparison}
+
+Table~\ref{tab:feature-comparison} reports the time-series cross-validated AUC of the LLM-guided 25-feature set against the RFM baseline on the initial training period, for each labeling scheme. The LLM-guided set outperforms the RFM baseline for both schemes, by 0.0251 AUC points under L1 and 0.0349 under L2. This supports the preliminary research question: the LLM-guided construction and selection process identifies cross-table behavioral features that the RFM baseline does not capture, and the margin is larger under L2, where category-relative behavioral signals are more directly aligned with the category-level labeling mechanism itself. The 25-feature LLM-guided set is accordingly frozen and used identically across all eight configurations of the main experiment, consistent with Control Variable~2 in Table~\ref{tab:design-variables}.
+
+\begin{table}[htbp]
+  \centering
+  \footnotesize
+  \begin{tabular}{l l c}
+    \toprule
+    Scheme & Feature set & Mean CV AUC \\
+    \midrule
+    L1 & LLM-guided (25 features) & 0.8437 \\
+    L1 & RFM baseline & 0.8186 \\
+    L2 & LLM-guided (25 features) & 0.8484 \\
+    L2 & RFM baseline & 0.8135 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Preliminary feature-set comparison on the initial training period (time-series cross-validation).}
+  \label{tab:feature-comparison}
+\end{table}
+
+\subsection{Hyperparameter Tuning}
+
+Hyperparameters are tuned once per labeling scheme by checkpointed random search over leakage-safe time-series cross-validation folds on the initial training period, then frozen across the entire factorial experiment (Control Variable~1). Table~\ref{tab:tuning} reports the best configuration found for each scheme out of 20 completed search combinations. The two schemes select different configurations: L2's best model uses a deeper tree (\texttt{max\_depth}~=~8) with a much larger \texttt{min\_child\_weight} (10 versus 1), consistent with L2's wider, category-pooled label windows producing a comparatively higher-variance target that benefits from stronger per-leaf regularization.
+
+\begin{table}[htbp]
+  \centering
+  \footnotesize
+  \begin{tabular}{l c c c c c c c c}
+    \toprule
+    Scheme & \texttt{colsample\_bytree} & \texttt{learning\_rate} & \texttt{max\_depth} & \texttt{min\_child\_weight} & \texttt{n\_estimators} & \texttt{subsample} & Mean CV AUC & Folds \\
+    \midrule
+    L1 & 0.7 & 0.05 & 6 & 1 & 300 & 0.7 & 0.8432 (SD 0.0099) & 6 \\
+    L2 & 1.0 & 0.05 & 8 & 10 & 200 & 0.7 & 0.8482 (SD 0.0035) & 3 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Best tuned XGBoost configuration per labeling scheme (checkpointed random search, leakage-safe time-series cross-validation).}
+  \label{tab:tuning}
+\end{table}
+
+\subsection{Descriptive Summary of the Factorial Experiment}
+\label{sec:truncation-artifact}
+
+Under the primary maturity arm, all eight conditions are scored prequentially across the same 12 monthly evaluation batches (2025-04-01 through 2026-03-01). Table~\ref{tab:descriptive-primary} reports, for each condition, the mean shared-outcome AUC, its coefficient of variation across batches, mean F1 and Recall@10\% against the shared outcome, and the mean Jaccard similarity of consecutive top-10\% risk lists. All eight conditions cluster tightly, between 0.8510 and 0.8525 mean AUC, with batch-to-batch CV no higher than 0.83\%, indicating that none of the eight configurations suffers pronounced temporal degradation over the one-year evaluation window.
+
+\begin{table}[htbp]
+  \centering
+  \footnotesize
+  \begin{tabular}{l l c c c c c}
+    \toprule
+    Scheme & Strategy & Mean AUC$_{\text{shared}}$ & CV(AUC) & Mean F1 & Mean Recall@10\% & Mean Jaccard \\
+    \midrule
+    L1 & S1 & 0.8518 & 0.0051 & 0.7779 & 0.1943 & 0.3607 \\
+    L1 & S2 & 0.8521 & 0.0053 & 0.7789 & 0.1945 & 0.3640 \\
+    L1 & S3 & 0.8512 & 0.0068 & 0.7775 & 0.1945 & 0.3641 \\
+    L1 & S4 & 0.8510 & 0.0069 & 0.7772 & 0.1944 & 0.3602 \\
+    L2 & S1 & 0.8516 & 0.0083 & 0.7765 & 0.1945 & 0.3634 \\
+    L2 & S2 & 0.8525 & 0.0060 & 0.7776 & 0.1946 & 0.3674 \\
+    L2 & S3 & 0.8514 & 0.0074 & 0.7687 & 0.1946 & 0.3696 \\
+    L2 & S4 & 0.8513 & 0.0069 & 0.7769 & 0.1945 & 0.3585 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Descriptive performance and stability summary, primary (scheme-specific maturity) arm, 12 evaluation batches per condition.}
+  \label{tab:descriptive-primary}
+\end{table}
+
+A notable artifact is observed at the final evaluation batch (2026-03-01): per-batch PSI rises sharply under both schemes (L1 to 0.53, L2 to 0.38 on the \texttt{recency} feature) relative to a stable baseline across the preceding 11 batches. This batch is also the smallest of the 20 monthly batches in row count, because some customers' most recent purchases fall outside the final observation window as the dataset ends. This pattern is therefore interpreted as an end-of-data truncation artifact rather than genuine distributional drift, and robustness check~(b) in Section~\ref{sec:robustness} verifies that the confirmatory conclusions do not depend on this batch.
+
+\subsection{Assumption Checks}
+
+The parametric reference specification (Section~\ref{sec:confirmatory-protocol}) is fitted to the 96 primary-arm observations and its residuals are examined before any confirmatory test is interpreted. The Shapiro--Wilk test rejects residual normality decisively ($W = 0.798$, $p = 3.74 \times 10^{-10}$), and Mauchly's test rejects sphericity decisively ($W \approx 9.6\times 10^{-7}$, $\chi^2(27) = 117.11$, $p = 3.41\times 10^{-13}$, $n=12$ batches, $k=8$ conditions). Both violations are expected at this sample size, as anticipated in Section~\ref{sec:confirmatory-protocol}, and confirm that the pre-specified non-parametric route (ART-ANOVA with Wilcoxon/Holm post-hoc) rather than the classical repeated-measures ANOVA is the appropriate confirmatory procedure. For reference only, the classical repeated-measures ANOVA fitted to the same data (scheme~$\times$~strategy, with batch entered as a fixed blocking term, residual $df=77$) would have reported the strategy main effect as significant ($F(3,77) = 3.91$, $p = 0.0118$) but both the scheme main effect ($F(1,77)=0.35$, $p=0.553$) and the interaction ($F(3,77)=0.26$, $p=0.854$) as non-significant — a materially different conclusion on the scheme effect from the ART-ANOVA reported next, illustrating why the assumption-robust procedure, not the classical reference model, is treated as confirmatory.
+
+\subsection{Confirmatory Interaction Test}
+
+Table~\ref{tab:art-primary} reports the ART-ANOVA results for the primary arm on the primary dependent variable, $\text{AUC}_{\text{shared}}$. The $A \times B$ (scheme~$\times$~strategy) interaction is \emph{not} significant, $F(3,77) = 0.517$, $p = 0.672$, partial~$\eta^2 = 0.020$. Following the pre-specified decision rule (Section~\ref{sec:confirmatory-protocol}), the analysis therefore proceeds to branch~4b: the two main effects are interpreted directly, without decomposing into simple main effects within scheme or within strategy. This result does not support the study's hypothesized RQ3 expectation that the benefit of update strategy would be conditional on the labeling scheme, and in particular that drift-triggered updating would show its greatest relative advantage specifically under category-level dynamic labeling: the data indicate instead that labeling-scheme and update-strategy decisions can be evaluated, and by extension optimized, independently of one another over the evaluation year studied.
+
+\begin{table}[htbp]
+  \centering
+  \footnotesize
+  \begin{tabular}{l c c c c c}
+    \toprule
+    Effect & $F$ & $df_1$ & $df_2$ & $p$ & Partial $\eta^2$ \\
+    \midrule
+    A (scheme) & 9.340 & 1 & 77 & 0.0031 & 0.108 \\
+    B (strategy) & 10.243 & 3 & 77 & $9.45\times 10^{-6}$ & 0.285 \\
+    A $\times$ B (interaction) & 0.517 & 3 & 77 & 0.672 & 0.020 \\
+    \bottomrule
+  \end{tabular}
+  \caption{ART-ANOVA on $\text{AUC}_{\text{shared}}$, primary (scheme-specific maturity) arm.}
+  \label{tab:art-primary}
+\end{table}
+
+Both main effects are significant. The strategy effect (B) carries the larger effect size (partial~$\eta^2=0.285$) and is decomposed in Section~\ref{sec:posthoc}; the scheme effect (A) is smaller but non-trivial (partial~$\eta^2=0.108$).
+
+\subsection{Main-Effect Decomposition}
+\label{sec:posthoc}
+
+Because the interaction is not significant, the strategy main effect is decomposed into the six pairwise strategy contrasts pooled across both schemes, Holm-corrected as a single six-test family, and the scheme main effect is reported as a single paired contrast (two levels require no decomposition). Table~\ref{tab:posthoc} reports every contrast with its rank-biserial effect size, median paired difference, 95\% moving-block-bootstrap confidence interval, raw and Holm-corrected $p$-values, and the resulting decision at $\alpha=0.05$.
+
+\begin{table}[htbp]
+  \centering
+  \footnotesize
+  \begin{tabular}{l c c c c c c}
+    \toprule
+    Comparison & $r_{rb}$ & Median $\Delta$ & 95\% CI & $p_{\text{raw}}$ & $p_{\text{Holm}}$ & Reject $H_0$ \\
+    \midrule
+    S1 vs.\ S2 (pooled) & $-0.668$ & $-0.00044$ & [$-0.00061$, $-0.00024$] & 0.0047 & 0.0141 & Yes \\
+    S1 vs.\ S3 (pooled) & $0.233$ & $0.00023$ & [$-0.00013$, $0.00056$] & 0.3305 & 0.5547 & No \\
+    S1 vs.\ S4 (pooled) & $0.767$ & $0.00037$ & [$0.00014$, $0.00048$] & 0.0005 & 0.0020 & Yes \\
+    S2 vs.\ S3 (pooled) & $0.947$ & $0.00052$ & [$0.00035$, $0.00088$] & $<0.0001$ & $<0.0001$ & Yes \\
+    S2 vs.\ S4 (pooled) & $0.853$ & $0.00086$ & [$0.00054$, $0.00112$] & $<0.0001$ & 0.0003 & Yes \\
+    S3 vs.\ S4 (pooled) & $0.286$ & $0.00002$ & [$-0.00004$, $0.00052$] & 0.2774 & 0.5547 & No \\
+    \midrule
+    L1 vs.\ L2 (scheme) & $-0.425$ & $-0.00045$ & [$-0.00091$, $-0.00013$] & \multicolumn{2}{c}{0.0096} & Yes \\
+    \bottomrule
+  \end{tabular}
+  \caption{Holm-corrected exact Wilcoxon signed-rank post-hoc contrasts, primary arm, $\text{AUC}_{\text{shared}}$. Differences are signed (first level minus second); S2 denotes periodic, S1 static, S3 rolling-window, S4 drift-triggered updating.}
+  \label{tab:posthoc}
+\end{table}
+
+Two patterns emerge. First, S2 (periodic retraining on all accumulated data) is the uniquely best-performing strategy: it significantly outperforms all three alternatives (S1, S3, S4), each at Holm-corrected $p<0.05$, with medium-to-large rank-biserial effect sizes ($|r_{rb}|$ between 0.668 and 0.947). Second, among the remaining three strategies, only S1~vs.~S4 reaches significance, with static (S1) outperforming drift-triggered (S4); S1~vs.~S3 and S3~vs.~S4 are not distinguishable at this sample size. This does not support the study's hypothesized expectation that drift-triggered updating would achieve performance comparable to periodic or rolling-window updating while retraining less often: S4 is significantly worse than S2 and, in this primary arm, also significantly worse than the static baseline it was designed to improve upon, despite retraining substantially less often than S2 or S3 (Section~\ref{sec:cost-frontier}). The scheme contrast confirms a small but significant advantage for L2 over L1 (median $\Delta \approx -0.00045$ AUC, i.e., L2 higher, $r_{rb}=-0.425$); the magnitude is practically small relative to the 0.85 operating range of AUC across all eight conditions.
+
+\subsection{Sensitivity Arm and Arm Reconciliation}
+
+Table~\ref{tab:art-equalized} repeats the confirmatory ART-ANOVA under the equalized-maturity sensitivity arm, in which both schemes observe labels exactly 90 days after the prediction point. The interaction remains non-significant, $F(3,77)=0.634$, $p=0.595$, and both main effects remain significant, with the same sign as the primary arm and, if anything, a larger effect size for the scheme main effect (partial~$\eta^2 = 0.239$ versus 0.108 in the primary arm).
+
+\begin{table}[htbp]
+  \centering
+  \footnotesize
+  \begin{tabular}{l c c c c c}
+    \toprule
+    Effect & $F$ & $df_1$ & $df_2$ & $p$ & Partial $\eta^2$ \\
+    \midrule
+    A (scheme) & 24.146 & 1 & 77 & $4.92\times 10^{-6}$ & 0.239 \\
+    B (strategy) & 14.854 & 3 & 77 & $1.01\times 10^{-7}$ & 0.367 \\
+    A $\times$ B (interaction) & 0.634 & 3 & 77 & 0.595 & 0.024 \\
+    \bottomrule
+  \end{tabular}
+  \caption{ART-ANOVA on $\text{AUC}_{\text{shared}}$, equalized-maturity sensitivity arm.}
+  \label{tab:art-equalized}
+\end{table}
+
+The per-condition mean AUC under the equalized arm differs from the primary arm by at most 0.00112 (L1-S1, the condition most affected by L1's earlier label maturity), and by less than 0.0003 for every other condition; all eight deltas are in a direction consistent with the primary arm's scheme ranking. Because the two arms agree in the sign and statistical significance of both main effects and the null interaction, the conclusions above are attributed to the labeling schemes and update strategies themselves rather than to the differential training-data recency that the scheme-specific maturity rule induces. The L1 primary arm nonetheless retains an identifiable operational cost: its shorter label window permits earlier retraining (mean effective lag 31--45 days versus 90--91 days for L2), a real scheduling advantage for L1 that the equalized arm deliberately removes in order to isolate the labeling effect, and which is not captured by the AUC-based tests above.
+
+\subsection{Robustness Checks}
+\label{sec:robustness}
+
+Table~\ref{tab:robustness} reports the two pre-specified robustness checks. Repeating the full ART-ANOVA with Recall@10\% as the dependent variable reproduces both significant main effects and the non-significant interaction found with AUC$_{\text{shared}}$. Repeating the primary-arm AUC analysis with the truncated final batch (2026-03-01, Section~\ref{sec:truncation-artifact}) excluded likewise reproduces all three conclusions, with every effect retaining its sign and significance pattern; the strategy and scheme main-effect sizes are, if anything, somewhat larger once the truncated batch is removed, consistent with that batch contributing noise rather than signal.
+
+\begin{table}[htbp]
+  \centering
+  \footnotesize
+  \begin{tabular}{l l c c c c c}
+    \toprule
+    Robustness check & Effect & $F$ & $df_1$ & $df_2$ & $p$ & Partial $\eta^2$ \\
+    \midrule
+    Recall@10\% as DV & A (scheme) & 13.807 & 1 & 77 & 0.0004 & 0.152 \\
+                       & B (strategy) & 5.215 & 3 & 77 & 0.0025 & 0.169 \\
+                       & A $\times$ B & 0.732 & 3 & 77 & 0.536 & 0.028 \\
+    \midrule
+    Exclude final batch & A (scheme) & 20.996 & 1 & 70 & $1.95\times 10^{-5}$ & 0.231 \\
+    ($n=88$)             & B (strategy) & 8.494 & 3 & 70 & $6.91\times 10^{-5}$ & 0.267 \\
+                       & A $\times$ B & 1.143 & 3 & 70 & 0.338 & 0.047 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Robustness checks: Recall@10\% as dependent variable, and exclusion of the truncated final evaluation batch. Both reproduce the primary conclusions.}
+  \label{tab:robustness}
+\end{table}
+
+\subsection{Cost--Performance Frontier}
+\label{sec:cost-frontier}
+
+Table~\ref{tab:cost-frontier} reports, for each condition, the mean shared-outcome AUC alongside the number of retraining events, cumulative training time, and total rows processed across retraining events over the 12-batch evaluation year. S1 (static) retrains zero times by construction. S2 and S3 retrain monthly (11 times), but S3's rolling window processes roughly 33--43\% of the rows S2 processes and completes in under half the cumulative time, for a mean AUC within 0.0009--0.0012 of S2. S4 (drift-triggered) retrains only once across the entire evaluation year under both schemes, at a small fraction of S2's or S3's cumulative cost, but this cost saving is not accompanied by a performance advantage over the static baseline: Section~\ref{sec:posthoc} found S4 significantly worse than S1 in the primary arm. The drift-triggered strategy is therefore not, on this evidence, an efficient substitute for periodic retraining; its practical appeal would need to rest on cost savings alone rather than on the hypothesized near-parity with periodic or rolling-window performance.
+
+\begin{table}[htbp]
+  \centering
+  \footnotesize
+  \begin{tabular}{l l c c c c}
+    \toprule
+    Scheme & Strategy & Mean AUC$_{\text{shared}}$ & Retrains & Cumulative fit (s) & Rows processed \\
+    \midrule
+    L1 & S1 & 0.8518 & 0 & 0 & 0 \\
+    L1 & S2 & 0.8521 & 11 & 407.0 & 48{,}779{,}305 \\
+    L1 & S3 & 0.8512 & 11 & 190.3 & 20{,}712{,}614 \\
+    L1 & S4 & 0.8510 & 1 & 14.5 & 1{,}593{,}865 \\
+    L2 & S1 & 0.8516 & 0 & 0 & 0 \\
+    L2 & S2 & 0.8525 & 11 & 356.1 & 42{,}093{,}397 \\
+    L2 & S3 & 0.8514 & 11 & 83.6 & 14{,}026{,}706 \\
+    L2 & S4 & 0.8513 & 1 & 7.7 & 1{,}281{,}994 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Cost--performance frontier: mean shared-outcome AUC against retraining count, cumulative fit time, and rows processed, primary arm.}
+  \label{tab:cost-frontier}
+\end{table}
+
+\subsection{Temporal Trajectories}
+
+Figure~\ref{fig:step8-trajectory} plots batch-level $\text{AUC}_{\text{shared}}$ for all eight conditions across the 12 evaluation batches. Consistent with the non-significant interaction reported above, the eight trajectories run largely parallel to one another rather than crossing or diverging over the evaluation year; the visible separation between S2 and the other three strategies is present from the first evaluation batch onward and remains roughly constant in magnitude, rather than widening or narrowing as the strategies accumulate more retraining events.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{data/fig_step8_trajectory.png}
+    \caption{Batch-level $\text{AUC}_{\text{shared}}$ for all eight conditions (L1/L2~$\times$~S1--S4) across the 12 monthly evaluation batches, primary arm.}
+    \label{fig:step8-trajectory}
+\end{figure}
+
+\subsection{Summary of Findings by Research Question}
+
+The preliminary research question is supported: the LLM-guided feature set improves cross-validated AUC over the RFM baseline for both labeling schemes, and is frozen as the feature set for the main experiment (Table~\ref{tab:feature-comparison}).
+
+RQ1 (labeling scheme) receives mixed support. The confirmatory test finds a statistically significant, small-to-moderate advantage for category-level dynamic labeling (L2) over fixed-threshold labeling (L1) on the shared-outcome AUC (partial~$\eta^2=0.108$, reproduced in the equalized-maturity arm), supporting the directional hypothesis that dynamic labeling improves downstream predictive utility. However, the hypothesized stability advantage is not supported: L2's batch-to-batch AUC coefficient of variation is as high as or higher than L1's under every matched strategy (Table~\ref{tab:descriptive-primary}), and the two schemes' mean Recall@10\% differ by less than 0.0003 in absolute terms. The practical magnitude of the AUC advantage is also small relative to the overall 0.85 operating range.
+
+RQ2 (update strategy) is supported in its first part and not supported in its second. Update strategy has the largest effect of the three tested factors (partial~$\eta^2=0.285$ in the primary arm), and periodic retraining (S2) is unambiguously the best-performing strategy, significantly outperforming all three alternatives post-hoc. The hypothesis that drift-triggered updating (S4) would approach the performance of periodic or rolling-window updating while retraining less often is not supported: S4 is significantly worse than S2 and, in the primary arm, significantly worse even than the static baseline, despite retraining only once across the evaluation year. S4's cost advantage is real (Table~\ref{tab:cost-frontier}) but is not accompanied by the hypothesized near-parity in performance.
+
+RQ3 (interaction) is not supported. The confirmatory ART-ANOVA interaction test is non-significant in both the primary arm ($p=0.672$) and the equalized-maturity sensitivity arm ($p=0.595$), and both robustness checks reproduce this null result. The data therefore indicate that, over the one-year evaluation window studied, the choice of labeling scheme and the choice of update strategy can be optimized independently of one another; the study does not find evidence that category-level dynamic labeling and drift-triggered updating interact synergistically, contrary to the directional expectation stated in Section~\ref{sec:research-design}.

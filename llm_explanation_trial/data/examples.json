@@ -1,0 +1,2242 @@
+[
+  {
+    "example_id": "L1_0",
+    "scheme": "L1",
+    "y_prob": 0.9913,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.0336,
+        "value": 87.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.975,
+        "value": 88.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.893,
+        "value": 1.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4256,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3622,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "recency",
+        "shap": 0.975,
+        "value": 88.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.893,
+        "value": 1.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4256,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3622,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_1",
+    "scheme": "L1",
+    "y_prob": 0.9912,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.0414,
+        "value": 87.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.9748,
+        "value": 88.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.8964,
+        "value": 1.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4234,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3608,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "recency",
+        "shap": 0.9748,
+        "value": 88.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.8964,
+        "value": 1.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4234,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3608,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_2",
+    "scheme": "L1",
+    "y_prob": 0.9894,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 0.9904,
+        "value": 71.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.9328,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7781,
+        "value": 72.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4215,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3632,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.9328,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7781,
+        "value": 72.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4215,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3632,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_3",
+    "scheme": "L1",
+    "y_prob": 0.9893,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 0.9941,
+        "value": 61.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.9322,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7478,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.421,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3642,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.9322,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7478,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.421,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3642,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_4",
+    "scheme": "L1",
+    "y_prob": 0.9893,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 0.9941,
+        "value": 61.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.9306,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.747,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4205,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3642,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.9306,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.747,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4205,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3642,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_5",
+    "scheme": "L1",
+    "y_prob": 0.9893,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 0.9941,
+        "value": 61.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.9306,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.747,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4205,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3642,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.9306,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.747,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4205,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3642,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_6",
+    "scheme": "L1",
+    "y_prob": 0.9893,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.041,
+        "value": 76.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7689,
+        "value": 77.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.4949,
+        "value": 4.5
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.436,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3573,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "recency",
+        "shap": 0.7689,
+        "value": 77.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.4949,
+        "value": 4.5
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.436,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3573,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_7",
+    "scheme": "L1",
+    "y_prob": 0.9892,
+    "label": 1,
+    "top_feature_removed_in_ablation": "store_median_ipi",
+    "full_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.2717,
+        "value": null
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": 1.0274,
+        "value": 80.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.8796,
+        "value": 80.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4394,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3622,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.0274,
+        "value": 80.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.8796,
+        "value": 80.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4394,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3622,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_8",
+    "scheme": "L1",
+    "y_prob": 0.9892,
+    "label": 1,
+    "top_feature_removed_in_ablation": "store_median_ipi",
+    "full_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.1062,
+        "value": null
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": 1.0654,
+        "value": 85.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.9881,
+        "value": 86.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4385,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3671,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.0654,
+        "value": 85.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.9881,
+        "value": 86.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4385,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3671,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_9",
+    "scheme": "L1",
+    "y_prob": 0.9891,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.0219,
+        "value": 59.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.6398,
+        "value": 60.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.5102,
+        "value": 4.5
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4347,
+        "value": null
+      },
+      {
+        "feature": "total_qty",
+        "shap": 0.3549,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "recency",
+        "shap": 0.6398,
+        "value": 60.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.5102,
+        "value": 4.5
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4347,
+        "value": null
+      },
+      {
+        "feature": "total_qty",
+        "shap": 0.3549,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_10",
+    "scheme": "L1",
+    "y_prob": 0.6577,
+    "label": 1,
+    "top_feature_removed_in_ablation": "ipi_std",
+    "full_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.4268,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3178,
+        "value": 1.0
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.3036,
+        "value": 3555.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.1979,
+        "value": null
+      },
+      {
+        "feature": "frequency_vs_store",
+        "shap": -0.1926,
+        "value": 0.33
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "frequency",
+        "shap": 0.3178,
+        "value": 1.0
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.3036,
+        "value": 3555.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.1979,
+        "value": null
+      },
+      {
+        "feature": "frequency_vs_store",
+        "shap": -0.1926,
+        "value": 0.33
+      }
+    ]
+  },
+  {
+    "example_id": "L1_11",
+    "scheme": "L1",
+    "y_prob": 0.033,
+    "label": 0,
+    "top_feature_removed_in_ablation": "frequency",
+    "full_features": [
+      {
+        "feature": "frequency",
+        "shap": -1.3543,
+        "value": 11.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": -0.8444,
+        "value": 5.48
+      },
+      {
+        "feature": "recency",
+        "shap": -0.5031,
+        "value": 3.0
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.2939,
+        "value": 0.1
+      },
+      {
+        "feature": "recent_activity",
+        "shap": -0.1889,
+        "value": 3.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "ipi_std",
+        "shap": -0.8444,
+        "value": 5.48
+      },
+      {
+        "feature": "recency",
+        "shap": -0.5031,
+        "value": 3.0
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.2939,
+        "value": 0.1
+      },
+      {
+        "feature": "recent_activity",
+        "shap": -0.1889,
+        "value": 3.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_12",
+    "scheme": "L1",
+    "y_prob": 0.541,
+    "label": 0,
+    "top_feature_removed_in_ablation": "recency",
+    "full_features": [
+      {
+        "feature": "recency",
+        "shap": 0.7597,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": -0.5403,
+        "value": 6.36
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.1941,
+        "value": 671.0
+      },
+      {
+        "feature": "recent_activity",
+        "shap": 0.1922,
+        "value": 0.0
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.1523,
+        "value": 3.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "ipi_std",
+        "shap": -0.5403,
+        "value": 6.36
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.1941,
+        "value": 671.0
+      },
+      {
+        "feature": "recent_activity",
+        "shap": 0.1922,
+        "value": 0.0
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.1523,
+        "value": 3.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_13",
+    "scheme": "L1",
+    "y_prob": 0.2198,
+    "label": 0,
+    "top_feature_removed_in_ablation": "frequency",
+    "full_features": [
+      {
+        "feature": "frequency",
+        "shap": -0.8744,
+        "value": 9.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": -0.6584,
+        "value": 7.41
+      },
+      {
+        "feature": "recency",
+        "shap": 0.5095,
+        "value": 30.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.2271,
+        "value": 8.67
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.1685,
+        "value": 964.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "ipi_std",
+        "shap": -0.6584,
+        "value": 7.41
+      },
+      {
+        "feature": "recency",
+        "shap": 0.5095,
+        "value": 30.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.2271,
+        "value": 8.67
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.1685,
+        "value": 964.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_14",
+    "scheme": "L1",
+    "y_prob": 0.8078,
+    "label": 1,
+    "top_feature_removed_in_ablation": "ipi_std",
+    "full_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.4667,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3837,
+        "value": 1.0
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.2401,
+        "value": 954.0
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.2345,
+        "value": 0.65
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.2338,
+        "value": null
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "frequency",
+        "shap": 0.3837,
+        "value": 1.0
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.2401,
+        "value": 954.0
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.2345,
+        "value": 0.65
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.2338,
+        "value": null
+      }
+    ]
+  },
+  {
+    "example_id": "L1_15",
+    "scheme": "L1",
+    "y_prob": 0.7981,
+    "label": 1,
+    "top_feature_removed_in_ablation": "recency",
+    "full_features": [
+      {
+        "feature": "recency",
+        "shap": 0.53,
+        "value": 72.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.3621,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.287,
+        "value": 1.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.1732,
+        "value": null
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": -0.1164,
+        "value": 2.12
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.3621,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.287,
+        "value": 1.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.1732,
+        "value": null
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": -0.1164,
+        "value": 2.12
+      }
+    ]
+  },
+  {
+    "example_id": "L1_16",
+    "scheme": "L1",
+    "y_prob": 0.677,
+    "label": 0,
+    "top_feature_removed_in_ablation": "ipi_std",
+    "full_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.4006,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.297,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.2066,
+        "value": 36.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.1963,
+        "value": null
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.1724,
+        "value": 466.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "frequency",
+        "shap": 0.297,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.2066,
+        "value": 36.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.1963,
+        "value": null
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.1724,
+        "value": 466.0
+      }
+    ]
+  },
+  {
+    "example_id": "L1_17",
+    "scheme": "L1",
+    "y_prob": 0.5497,
+    "label": 1,
+    "top_feature_removed_in_ablation": "ipi_std",
+    "full_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.4168,
+        "value": null
+      },
+      {
+        "feature": "recency",
+        "shap": -0.383,
+        "value": 6.0
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3337,
+        "value": 1.0
+      },
+      {
+        "feature": "frequency_vs_store",
+        "shap": -0.2809,
+        "value": 0.17
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.206,
+        "value": 0.33
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "recency",
+        "shap": -0.383,
+        "value": 6.0
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3337,
+        "value": 1.0
+      },
+      {
+        "feature": "frequency_vs_store",
+        "shap": -0.2809,
+        "value": 0.17
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.206,
+        "value": 0.33
+      }
+    ]
+  },
+  {
+    "example_id": "L1_18",
+    "scheme": "L1",
+    "y_prob": 0.7738,
+    "label": 0,
+    "top_feature_removed_in_ablation": "recency",
+    "full_features": [
+      {
+        "feature": "recency",
+        "shap": -0.5265,
+        "value": 1.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4808,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.4181,
+        "value": 1.0
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": 0.3697,
+        "value": 0.0
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.2828,
+        "value": 0.02
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.4808,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.4181,
+        "value": 1.0
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": 0.3697,
+        "value": 0.0
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.2828,
+        "value": 0.02
+      }
+    ]
+  },
+  {
+    "example_id": "L1_19",
+    "scheme": "L1",
+    "y_prob": 0.9682,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 0.8835,
+        "value": 45.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4685,
+        "value": null
+      },
+      {
+        "feature": "recency",
+        "shap": 0.3737,
+        "value": 46.0
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3678,
+        "value": 1.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.2639,
+        "value": null
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.4685,
+        "value": null
+      },
+      {
+        "feature": "recency",
+        "shap": 0.3737,
+        "value": 46.0
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3678,
+        "value": 1.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.2639,
+        "value": null
+      }
+    ]
+  },
+  {
+    "example_id": "L2_0",
+    "scheme": "L2",
+    "y_prob": 0.9935,
+    "label": 1,
+    "top_feature_removed_in_ablation": "store_median_ipi",
+    "full_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.2635,
+        "value": null
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": 1.2237,
+        "value": 80.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7988,
+        "value": 80.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.5225,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3038,
+        "value": 45.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.2237,
+        "value": 80.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7988,
+        "value": 80.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.5225,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3038,
+        "value": 45.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_1",
+    "scheme": "L2",
+    "y_prob": 0.9932,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.1764,
+        "value": 87.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0083,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.8318,
+        "value": 88.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4471,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3588,
+        "value": 260.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0083,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.8318,
+        "value": 88.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4471,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3588,
+        "value": 260.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_2",
+    "scheme": "L2",
+    "y_prob": 0.993,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.1801,
+        "value": 87.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0095,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.8341,
+        "value": 88.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4459,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3484,
+        "value": 260.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0095,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.8341,
+        "value": 88.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4459,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3484,
+        "value": 260.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_3",
+    "scheme": "L2",
+    "y_prob": 0.9929,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.1722,
+        "value": 71.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0114,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7355,
+        "value": 72.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4458,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3693,
+        "value": 260.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0114,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7355,
+        "value": 72.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4458,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3693,
+        "value": 260.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_4",
+    "scheme": "L2",
+    "y_prob": 0.9928,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.1818,
+        "value": 61.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0134,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7031,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4469,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3665,
+        "value": 260.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0134,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7031,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4469,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3665,
+        "value": 260.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_5",
+    "scheme": "L2",
+    "y_prob": 0.9926,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.1775,
+        "value": 61.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0123,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7054,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4463,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3603,
+        "value": 260.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0123,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7054,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4463,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3603,
+        "value": 260.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_6",
+    "scheme": "L2",
+    "y_prob": 0.9926,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.1775,
+        "value": 61.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0123,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7054,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4463,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3603,
+        "value": 260.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0123,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7054,
+        "value": 67.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4463,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3603,
+        "value": 260.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_7",
+    "scheme": "L2",
+    "y_prob": 0.9922,
+    "label": 1,
+    "top_feature_removed_in_ablation": "store_median_ipi",
+    "full_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.2535,
+        "value": null
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": 1.2036,
+        "value": 71.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7435,
+        "value": 72.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.519,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.2785,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.2036,
+        "value": 71.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7435,
+        "value": 72.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.519,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.2785,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_8",
+    "scheme": "L2",
+    "y_prob": 0.9915,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.2164,
+        "value": 68.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.1513,
+        "value": null
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7013,
+        "value": 69.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.5107,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.2755,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.1513,
+        "value": null
+      },
+      {
+        "feature": "recency",
+        "shap": 0.7013,
+        "value": 69.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.5107,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.2755,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_9",
+    "scheme": "L2",
+    "y_prob": 0.9911,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 1.1548,
+        "value": 47.0
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0156,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.4861,
+        "value": 53.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4591,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3575,
+        "value": 260.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "store_median_ipi",
+        "shap": 1.0156,
+        "value": 1.0
+      },
+      {
+        "feature": "recency",
+        "shap": 0.4861,
+        "value": 53.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4591,
+        "value": null
+      },
+      {
+        "feature": "store_txn_volume",
+        "shap": 0.3575,
+        "value": 260.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_10",
+    "scheme": "L2",
+    "y_prob": 0.8854,
+    "label": 0,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 0.9935,
+        "value": 32.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.5335,
+        "value": null
+      },
+      {
+        "feature": "store_active_customers",
+        "shap": -0.2766,
+        "value": 16.0
+      },
+      {
+        "feature": "total_qty",
+        "shap": -0.2386,
+        "value": 27.0
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.2349,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.5335,
+        "value": null
+      },
+      {
+        "feature": "store_active_customers",
+        "shap": -0.2766,
+        "value": 16.0
+      },
+      {
+        "feature": "total_qty",
+        "shap": -0.2386,
+        "value": 27.0
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.2349,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_11",
+    "scheme": "L2",
+    "y_prob": 0.5581,
+    "label": 0,
+    "top_feature_removed_in_ablation": "ipi_std",
+    "full_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.4559,
+        "value": null
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.4062,
+        "value": 2866.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.2287,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.1805,
+        "value": 1.0
+      },
+      {
+        "feature": "frequency_vs_store",
+        "shap": -0.1706,
+        "value": 0.5
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": -0.4062,
+        "value": 2866.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.2287,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.1805,
+        "value": 1.0
+      },
+      {
+        "feature": "frequency_vs_store",
+        "shap": -0.1706,
+        "value": 0.5
+      }
+    ]
+  },
+  {
+    "example_id": "L2_12",
+    "scheme": "L2",
+    "y_prob": 0.7451,
+    "label": 1,
+    "top_feature_removed_in_ablation": "recency",
+    "full_features": [
+      {
+        "feature": "recency",
+        "shap": 0.5017,
+        "value": 71.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.4346,
+        "value": null
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.2835,
+        "value": 373.0
+      },
+      {
+        "feature": "store_active_customers",
+        "shap": 0.2349,
+        "value": 1293.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.2258,
+        "value": null
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.4346,
+        "value": null
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.2835,
+        "value": 373.0
+      },
+      {
+        "feature": "store_active_customers",
+        "shap": 0.2349,
+        "value": 1293.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.2258,
+        "value": null
+      }
+    ]
+  },
+  {
+    "example_id": "L2_13",
+    "scheme": "L2",
+    "y_prob": 0.0592,
+    "label": 0,
+    "top_feature_removed_in_ablation": "frequency",
+    "full_features": [
+      {
+        "feature": "frequency",
+        "shap": -1.0527,
+        "value": 10.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": -1.0166,
+        "value": 6.95
+      },
+      {
+        "feature": "recency",
+        "shap": 0.4244,
+        "value": 23.0
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.2916,
+        "value": 1423.0
+      },
+      {
+        "feature": "recent_activity",
+        "shap": -0.2356,
+        "value": 4.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "ipi_std",
+        "shap": -1.0166,
+        "value": 6.95
+      },
+      {
+        "feature": "recency",
+        "shap": 0.4244,
+        "value": 23.0
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.2916,
+        "value": 1423.0
+      },
+      {
+        "feature": "recent_activity",
+        "shap": -0.2356,
+        "value": 4.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_14",
+    "scheme": "L2",
+    "y_prob": 0.7259,
+    "label": 0,
+    "top_feature_removed_in_ablation": "ipi_std",
+    "full_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.5194,
+        "value": null
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.3506,
+        "value": 954.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.267,
+        "value": null
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.192,
+        "value": 0.65
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.1838,
+        "value": 1.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": -0.3506,
+        "value": 954.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.267,
+        "value": null
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.192,
+        "value": 0.65
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.1838,
+        "value": 1.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_15",
+    "scheme": "L2",
+    "y_prob": 0.2681,
+    "label": 1,
+    "top_feature_removed_in_ablation": "ipi_std",
+    "full_features": [
+      {
+        "feature": "ipi_std",
+        "shap": -0.7346,
+        "value": 6.36
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": -0.3939,
+        "value": 29.5
+      },
+      {
+        "feature": "recency",
+        "shap": 0.2288,
+        "value": 30.0
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.1892,
+        "value": 3.0
+      },
+      {
+        "feature": "month",
+        "shap": -0.1721,
+        "value": 3.0
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "ipi_mean",
+        "shap": -0.3939,
+        "value": 29.5
+      },
+      {
+        "feature": "recency",
+        "shap": 0.2288,
+        "value": 30.0
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.1892,
+        "value": 3.0
+      },
+      {
+        "feature": "month",
+        "shap": -0.1721,
+        "value": 3.0
+      }
+    ]
+  },
+  {
+    "example_id": "L2_16",
+    "scheme": "L2",
+    "y_prob": 0.9134,
+    "label": 1,
+    "top_feature_removed_in_ablation": "customer_tenure",
+    "full_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": 0.7308,
+        "value": 3.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": 0.6814,
+        "value": null
+      },
+      {
+        "feature": "recency",
+        "shap": -0.4456,
+        "value": 4.0
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3076,
+        "value": 1.0
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.2724,
+        "value": 0.11
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.6814,
+        "value": null
+      },
+      {
+        "feature": "recency",
+        "shap": -0.4456,
+        "value": 4.0
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.3076,
+        "value": 1.0
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.2724,
+        "value": 0.11
+      }
+    ]
+  },
+  {
+    "example_id": "L2_17",
+    "scheme": "L2",
+    "y_prob": 0.1213,
+    "label": 0,
+    "top_feature_removed_in_ablation": "ipi_std",
+    "full_features": [
+      {
+        "feature": "ipi_std",
+        "shap": -0.9082,
+        "value": 9.83
+      },
+      {
+        "feature": "recency",
+        "shap": -0.7591,
+        "value": 1.0
+      },
+      {
+        "feature": "frequency",
+        "shap": -0.4768,
+        "value": 6.0
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.3508,
+        "value": 0.02
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.2561,
+        "value": 8.67
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "recency",
+        "shap": -0.7591,
+        "value": 1.0
+      },
+      {
+        "feature": "frequency",
+        "shap": -0.4768,
+        "value": 6.0
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.3508,
+        "value": 0.02
+      },
+      {
+        "feature": "store_median_ipi",
+        "shap": 0.2561,
+        "value": 8.67
+      }
+    ]
+  },
+  {
+    "example_id": "L2_18",
+    "scheme": "L2",
+    "y_prob": 0.0118,
+    "label": 0,
+    "top_feature_removed_in_ablation": "frequency",
+    "full_features": [
+      {
+        "feature": "frequency",
+        "shap": -1.4103,
+        "value": 12.0
+      },
+      {
+        "feature": "ipi_std",
+        "shap": -1.0365,
+        "value": 11.12
+      },
+      {
+        "feature": "recency",
+        "shap": -0.7208,
+        "value": 2.0
+      },
+      {
+        "feature": "recent_activity",
+        "shap": -0.3528,
+        "value": 7.0
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.2724,
+        "value": 0.08
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "ipi_std",
+        "shap": -1.0365,
+        "value": 11.12
+      },
+      {
+        "feature": "recency",
+        "shap": -0.7208,
+        "value": 2.0
+      },
+      {
+        "feature": "recent_activity",
+        "shap": -0.3528,
+        "value": 7.0
+      },
+      {
+        "feature": "recency_vs_store",
+        "shap": 0.2724,
+        "value": 0.08
+      }
+    ]
+  },
+  {
+    "example_id": "L2_19",
+    "scheme": "L2",
+    "y_prob": 0.6068,
+    "label": 1,
+    "top_feature_removed_in_ablation": "ipi_std",
+    "full_features": [
+      {
+        "feature": "ipi_std",
+        "shap": 0.4842,
+        "value": null
+      },
+      {
+        "feature": "customer_tenure",
+        "shap": -0.3929,
+        "value": 3064.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.2356,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.1861,
+        "value": 1.0
+      },
+      {
+        "feature": "frequency_vs_store",
+        "shap": -0.1621,
+        "value": 0.5
+      }
+    ],
+    "ablated_features": [
+      {
+        "feature": "customer_tenure",
+        "shap": -0.3929,
+        "value": 3064.0
+      },
+      {
+        "feature": "ipi_mean",
+        "shap": 0.2356,
+        "value": null
+      },
+      {
+        "feature": "frequency",
+        "shap": 0.1861,
+        "value": 1.0
+      },
+      {
+        "feature": "frequency_vs_store",
+        "shap": -0.1621,
+        "value": 0.5
+      }
+    ]
+  }
+]

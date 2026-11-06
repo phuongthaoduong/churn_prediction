@@ -26,6 +26,7 @@ contract).
 | 8.2 | `feature_set_comparison.py` | Compares the 25-feature set against an RFM baseline using tuned hyperparameters; freezes the feature set; reports mutual information. |
 | 8.3 | `run_experiment.py` | Runs the prequential factorial experiment (L1/L2 × S1–S4 strategies) over both maturity modes (`scheme`, `equalized`); persists predictions under `experiment_output/predictions/<mode>/<strategy>/` and the retrain log. |
 | 8.4 | `compute_metrics.py` | Computes per-batch AUC/F1/Recall@10%/Jaccard against the shared and own labels, and aggregates per-configuration summaries with retraining cost. |
+| 9 | `shap_analysis.py` | Fits one canonical model per scheme (frozen features/hyperparameters, trained on all matured batches as of the final evaluation point) and computes SHAP values on a 15k-row sample of the final batch. Resolves the Step 7 open question of whether `ipi_std`'s top gain-importance rank despite 63.5% NaN is genuine signal or a NaN-routing artifact. |
 
 Shared modules (not pipeline steps, imported by the scripts above):
 `experiment_config.py`, `drift_utils.py`, `strategies.py`, `metrics.py`.

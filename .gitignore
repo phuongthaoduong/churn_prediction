@@ -3,6 +3,9 @@ sale_data/
 profiling_output/
 experiment_output/
 
+# Secrets — never commit
+.env
+
 # OS / editor
 .DS_Store
 __pycache__/

@@ -3,4 +3,5 @@ pyarrow>=15
 numpy>=1.26
 scikit-learn>=1.4
 xgboost>=2.0
+shap>=0.54
 pytest>=8.0
